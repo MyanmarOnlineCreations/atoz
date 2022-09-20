@@ -1,0 +1,1352 @@
+@font-face {
+    font-family: zawgyi;
+    src: url("/sites/all/fonts/Zawgyi.woff") format('woff');
+}
+
+div#messages {
+    display: none;
+}
+
+.messages.error {
+    display: none;
+}
+
+html {
+    padding: 0;
+    margin: 0;
+    color: #000;
+    background-color: #e0e0e0;
+}
+
+body {
+    font-family: zawgyi, Roboto, Arial, Georgia, "Times New Roman", Times, serif;
+    color: #000;
+    padding: 0;
+    margin: 0 auto;
+    width: 100vw;
+    max-width: 480px;
+    font-size: 5.5vw;
+}
+
+input {
+    font-family: zawgyi, Roboto, Arial, Georgia, "Times New Roman", Times, serif;
+}
+
+textarea {
+    font-family: zawgyi, Roboto, Arial, Georgia, "Times New Roman", Times, serif;
+}
+
+a {
+    text-decoration: none;
+    color: #000;
+}
+
+
+
+/* COMMON TO EVERY PAGE PAGE */
+
+#webapp-wrapper .my-atoz-page-title {
+    margin: 0.5em 1em;
+}
+#webapp-wrapper {
+    overflow: hidden;
+    text-align: center;
+    position: relative;
+    /*color: #fff;*/
+    min-height: 100vh;
+    background-color: #f7ca17;
+}
+
+
+   #webapp-wrapper .content-top {
+    background-color: #fff;
+    width: 100%;
+    overflow:hidden;
+    position: relative;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+#webapp-wrapper .my-atoz-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: 100%;
+    height: 500vh;
+    background: url(/sites/all/modules/atoz/images/webapp_background_init.jpg) no-repeat;
+    background-position: 0 0vh;
+    background-size: contain;
+    background-color: #000;
+}
+
+
+#webapp-wrapper .my-atoz-content-logo {
+    text-align: center;
+    width: 100%;
+    text-align: center;
+    overflow: hidden;
+    padding: 0.5em 0 0.4em 0;
+}
+
+#webapp-wrapper .my-atoz-content-logo img {
+    width: 50%;
+    vertical-align: middle;
+}
+
+
+#webapp-wrapper .my-atoz-back {
+    position: absolute;
+    left: 4%;
+    top: 0;
+    height: 100%;
+    width: 6%;
+    background: url(/sites/all/modules/atoz/images/back.png) no-repeat;
+    background-position: center;
+    background-size: contain;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.content-top {
+    background-color: #fff;
+}
+
+#webapp-wrapper .content-block {
+    min-height: 90vh;
+    border-top: 1px solid #333;
+}
+
+/* MENU BLOCK */
+
+
+#webapp-wrapper .my-atoz-menu-block {
+    position: fixed;
+    right: 0;
+    top: 0;
+    padding-top: 2.8em;
+    padding-right: 2.5em;
+    cursor: pointer;
+    z-index: 200;
+    background-color: #fff;
+}
+
+#webapp-wrapper .my-atoz-menu {
+    position: absolute;
+    top: 25%;
+    right: 20%;
+    width: 60%;
+    height: 50%;
+    background: url(/sites/all/modules/atoz/images/menu.png) no-repeat;
+    background-position: center;
+    background-size: contain;
+    cursor: pointer;
+}
+
+
+#webapp-wrapper .my-atoz-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(41,34,64, 0.8);
+    z-index: 10;
+    display: none;
+}
+
+#webapp-wrapper .my-atoz-menu-inner-block {
+    position: absolute;
+    top: 0;
+    left: -100%;
+}
+
+#webapp-wrapper .my-atoz-menu-items {
+    background-color: #292240;
+    float: left;
+    padding-bottom: 0.5em;
+}
+
+#webapp-wrapper .my-atoz-menu-close {
+    float: left;
+    margin: 0.25em 0 0 0.25em;
+    width: 1.5em;
+    height: 1.5em;
+    background: url(/sites/all/modules/atoz/images/close2.png) no-repeat;
+    background-position: center;
+    background-size: contain;
+    cursor: pointer;
+}
+
+#webapp-wrapper .my-atoz-menu-item {
+    padding: 0em 1em 0em 3.25em;
+    text-align: left;
+    font-size: 0.8em;
+    line-height: 2em;
+    cursor: pointer;
+}
+
+
+#webapp-wrapper .my-atoz-menu-home {
+    color: #98cdd6;
+    background: url(/sites/all/modules/atoz/images/home_icon.png) no-repeat;
+    background-position: 1em center;
+    background-size: 1.5em 1.5em;
+    padding-top: 0.35em;
+    border-bottom: 1px solid rgba(255,255,255, 0.5);
+}
+
+#webapp-wrapper .my-atoz-menu-last {
+    margin-bottom: 0.25em;
+    padding-bottom: 0.25em;
+    border-bottom: 1px solid rgba(255,255,255, 0.5);
+}
+
+
+#webapp-wrapper .my-atoz-menu-account {
+    border-top: 1px solid rgba(255,255,255, 0.5);
+    color: #afd46c;
+    background: url(/sites/all/modules/atoz/images/account_icon.png) no-repeat;
+    background-position: 1em center;
+    background-size: 1.5em 1.5em;
+    padding-top: 0.35em;
+}
+
+
+#webapp-wrapper .my-atoz-menu-inner-block a {
+    color: #fff;
+}
+
+.my-atoz-menu-item.my-atoz_menu_account {
+        background: url(/sites/all/modules/atoz/images/login_menu.png);
+    background-repeat: no-repeat;
+    background-size: 30px 30px;
+    background-position: 9% 50%;
+    padding: 0.3em 1em 0.3em 4.25em !important;
+    border-bottom: 1px solid #ccc;
+}
+
+.my-atoz_menu_category{
+    background: url(/sites/all/modules/atoz/images/menu_category.png);
+    background-repeat: no-repeat;
+    background-size: 30px 30px;
+    background-position: 9% 50%;
+    padding: 0.3em 1em 0.3em 4.25em !important;
+}
+
+/* ERROR BLOCK */
+
+#my-atoz-error-block {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 999;
+    margin: 0 auto;
+    max-width: 480px;
+    overflow:hidden;
+}
+
+.my-atoz-error-background {
+    position: absolute;
+    background-color: #000;
+    width: 100%;
+    height: 500vh;
+    opacity: 0.8;
+    z-index: 0;
+}
+
+.my-atoz-error-message {
+    position: relative;
+    width: 70%;
+    margin: 20vh auto 2em auto;
+    font-size: 0.9em;
+    z-index: 1;
+    font-weight: bold;
+    line-height: 1.5em;
+    background-color: #fff;
+    padding: 4vw;
+    border: 1px solid #959595;
+    border-radius: 1em;
+    color: #11519a;
+}
+
+.my-atoz-error-signup,
+.my-atoz-error-login,
+.my-atoz-error-ok,
+.my-atoz-error-cancel,
+.my-atoz-error-generic
+ {
+    position: relative;
+    width: 50%;
+    margin: 2em 0 0 25%;
+    z-index: 1;
+    color: #fff;
+    background: linear-gradient( 0deg, rgba(243,111,73, 1.0), rgba(252,177,59,1.0) );
+    background: -moz-linear-gradient( to top, rgba(243,111,73, 1.0), rgba(252,177,59,1.0) );
+	box-sizing: border-box;
+	border-radius: 1em;
+	padding: 0.5em 1em;
+	float: left;
+	text-align: center;
+	cursor: pointer;
+	font-size: 0.8em;
+	border: none;
+}
+
+.my-atoz-error-line {
+    margin: 5% 0;
+}
+
+/* HOME PAGE */
+
+
+#webapp-wrapper .my-atoz-title {
+    margin: 0 1em 1em 1em;
+    font-size: 1em;
+    line-height: 1.5em;
+}
+
+
+#webapp-wrapper .my-atoz-season-item {
+    border-bottom: 1px solid #3c325e;
+    padding: 0.3em 1em 0.3em 1em;
+    text-align: left;
+}
+
+#webapp-wrapper  .my-atoz-terms-block,
+#webapp-wrapper  .my-atoz-info-block {
+    text-align: left;
+    font-size: 1em;
+    color: #fff;
+    margin: 4%;
+}
+
+.my-atoz-splash-overlay {
+    width: 100%;
+    height: 100vh;
+    z-index: 100;
+    background: url(/sites/all/modules/atoz/images/loading_screen.jpg) top left no-repeat;
+    background-size: contain;
+    overflow: hidden;
+    position: relative;
+    background-color: #292240;
+}
+
+.my-atoz-splash_enter {
+    width: 20%;
+    margin: 98% auto 0 auto;
+}
+
+.my-atoz-splash_enter img {
+    width: 100%;
+}
+
+#webapp-wrapper .my-atoz-signup-overlay {
+    width: 100%;
+    height: 100vh;
+    max-height: 768px;
+    z-index: 100;
+    background: url("/sites/all/modules/atoz/images/fb_loginbg.png");
+    background-size: cover;
+    background-position: top left;
+    overflow: hidden;
+    position: relative;
+}
+
+div#atoz_features {
+    overflow: auto;
+    margin-bottom: 30%;
+}
+
+#webapp-wrapper .my-atoz-sign-up-block {
+    width: 85%;
+    margin: 18vh auto 0 auto;
+    color: #000;
+    background-color: transparent;
+    padding: 0.5em;
+    box-sizing: border-box;
+}
+
+#webapp-wrapper .my-atoz-sign-up-title {
+    margin: 1em;
+    text-align: center;
+    font-size: 1em;
+}
+
+#webapp-wrapper .my-atoz-sign-up-text {
+    margin: 1em 0.25em;
+    text-align: center;
+    font-size: 1.1em;
+}
+
+#webapp-wrapper .my-atoz-sign-up-text b {
+    color: #ec1f46;
+}
+
+#webapp-wrapper .my-atoz-sign-up-payment {
+    margin: 1em 0.25em;
+    text-align: center;
+    font-size: 0.8em;
+}
+
+#webapp-wrapper .my-atoz-sign-up-facebook {
+    clear: both;
+    background: url(/sites/all/modules/atoz/images/facebook_badge.png) no-repeat;
+    background-size: auto 85%;
+    background-position: 0.2em center;
+    border-radius: 0.25em;
+    background-color: #3b5998;
+    border: 2px solid #3b5998;
+    box-shadow: 5px 5px 5px #aaa;
+    padding: 0.25em 0.5em 0.25em 2.5em;
+    color: #fff;
+}
+
+
+body.page-webapp-signup div.my-atoz-sign-up-title img.fb_logo{
+    width: 100%;
+    height: auto;
+}
+
+
+#webapp-footer {
+    bottom: 0;
+    font-size: 0.75em;
+    text-align: center;
+    color: #777;
+    padding: 2% 0 2% 0;
+    background: #fff;
+    width: 480px;
+    position: fixed;
+    box-shadow: 0 -5px 10px -5px #ccc;
+}
+
+
+#webapp-wrapper .my-atoz-web-button {
+    margin-left:5%;
+    margin-top: 0em;
+    width: 42%;
+    float: left;
+}
+
+
+#webapp-wrapper .my-atoz-web-button img {
+    width: 100%;
+}
+
+#webapp-wrapper .my-atoz-call-to-action {
+    margin-top: 1em;
+}
+
+#webapp-wrapper .my-atoz-content-slogan {
+    background-color: #fff;
+    color: #888;
+    font-size: 0.8em;
+}
+
+#webapp-wrapper .my-atoz-facebook-signin {
+    position: absolute;
+    left: 4%;
+    top: 0em;
+    margin-top: 5%;
+    line-height: 2em;
+    height: 1.8em;
+    padding: 0em 0.5em 0 0;
+    /*border: 1px solid rgba(51, 80, 131, 0.3); */
+    background-color: #3b5998;
+    color: #fff;
+    border-radius: 0.4em;
+    cursor: pointer;
+    z-index: 1;
+    font-size: 0.6em;
+    background: linear-gradient(0, rgba(68, 101, 171, 1.0), rgba(106, 138, 204, 1.0));
+    background: -moz-linear-gradient(0, rgba(68, 101, 171, 1.0), rgba(106, 138, 204, 1.0));
+    overflow: hidden;
+}
+
+#webapp-wrapper .my-atoz-facebook-signin img {
+    display: block;
+    float: left;
+    height: 1em;
+    padding: 0.35em 0.5em; 0.5em 0.2em;
+    margin-right: 0.4em;
+    border-right: 1px solid #7893cd;
+    background: linear-gradient(0, rgba(24, 63, 148, 1.0), rgba(66, 102, 180, 1.0));
+    background: -moz-gradient(0, rgba(24, 63, 148, 1.0), rgba(66, 102, 180, 1.0));
+}
+
+.my-atoz-user-block {
+    margin-top: 1em;
+}
+
+
+/* - - - - -- - -  Slide section in home page - - - - - --  - - - - - - - - */
+.swiper-slide img{
+     width: 480px;
+     height:auto;
+     -webkit-box-shadow:0 10px 6px -6px #777;
+     -moz-box-shadow:0 10px 6px -6px #777;
+     box-shadow: 0 10px 6px -6px #777;
+}
+
+.swiper-container{
+     margin: 0 auto;
+     position: relative;
+     overflow: hidden;
+     list-style: none;
+     padding: 0;
+     z-index: 1;
+     background-color: #fff !important;
+     color: #333 !important;
+}
+
+.swiper-pagination-bullet{
+    width: 14px !important;
+    height: 14px !important;
+    border-radius : 0% !important;
+}
+
+.swiper-pagination-bullet {
+    width: 8px;
+    height: 8px;
+    display: inline-block;
+    border-radius:5px !important;
+    background: transparent;
+    opacity: .2 ;
+    border: 2px double #333;
+} 
+
+.swiper-pagination-bullet-active {
+    opacity: 1 !important;
+    background: red !important;
+    border: 2px double #d0b10c !important;
+}
+
+div.swiper-slide h3.atoz_title{
+    text-align:left;
+    padding:0 0 0 5%;
+    margin:2% 0 0 0;
+    font-family: 'Righteous', serif;
+    font-size: 1.2em; 
+    text-shadow: .03em .03em 0 hsla(230,40%,50%,1);
+  
+    
+    
+}
+
+div.swiper-slide div.atoz_rate_div{
+    padding:0 0 1% 3%;
+    margin: -2% 0 0 0 !important;
+}
+
+/*.swiper-wrapper {
+    min-height: 445px;
+    height: auto;
+}*/
+
+.swiper-wrapper{
+    min-height: auto;
+    padding: 0 0 51px 0 !important;
+}
+
+.atoz_use {
+    width: 100%;
+}
+
+div.atoz_use div.atoz_rate_div{
+    width: 56%; 
+    float:left;
+}
+
+div.atoz_use div.atoz_downlaod{
+     width: 39%;
+     float:right;
+}
+
+/*- - -- - - - - - Category section in home page - - - - - - - -  - - - -- */
+.atoz-category {
+    width: 29%;
+    float: left;
+    height: 167px;
+    /* background: url(/sites/all/modules/atoz/images/actionatoz.png); */
+    background-repeat: no-repeat;
+    border: 4px solid #fff;
+    border-radius: 5px;
+    margin: 0 1% 4% 1%;
+    background-position: 50%;    
+    background-size: cover;
+    background-color: #fff;
+    padding: 1% 0 0 0;
+}
+
+.atoz-category div.atoz_category_title{
+    color: #333;
+    font-size: 0.8em;
+}
+
+div.atoz_category_img img{
+    border: 4px solid orange;
+    border-radius: 7px;
+}
+
+div#atoz_category {
+    width: 100%;
+    overflow: auto;
+    background: url(/sites/all/modules/atoz/images/home_catbg.png);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    padding:4% 0 10% 0;
+}
+
+div#atoz_category h1 {
+    font-size: 1.2em;
+    letter-spacing: 1px;
+    color: #fff;
+    text-shadow: 2px 2px 4px #000000;
+}
+
+/* - - -- - - - - - - atoz features section for home page - - - - - - - - - -- -*/
+
+div#atoz_features h1{
+    font-size: 1.2em;
+    letter-spacing: 1px;
+    color: #fff;
+    text-shadow: 2px 2px 4px #000000;
+}
+
+div#atoz_features h4 {
+    color: #333;
+    text-align: left;
+    padding: 0 0 0 8%;
+    line-height: 0px;
+}
+
+.atoz_features .column {
+    box-shadow: 0px 0px 10px 4px rgba(204, 204, 204, 0.75);
+    -moz-box-shadow: 0px 0px 10px 4px rgba(204, 204, 204, 0.75);
+    -webkit-box-shadow: 0px 0px 10px 4px rgba(204, 204, 204, 0.75);
+    background-color: #fff;
+    border-radius: 10px;
+    width: 45%;
+    float: left;
+    margin-left: 3%;
+    text-align: left;
+    padding: 0 0 3% 0;
+    margin-bottom: 5%;
+}
+
+div.more_cat a{
+    padding: 1% 5% 1% 5%;
+    border: 1px solid #cbeacb;
+    background-color: #0d770d;
+    border-radius: 9px;
+    color: #fff;
+    letter-spacing: 1px;
+    font-size: 0.9em;
+    top: 10px;
+    position: relative;
+}
+/* - - - - -  - - - - - - -- - - - - - - - -for categories detail page - - - - - - - -  - --  - - - - - - - */
+div#category_list_page h1 {
+    font-size: 1em;
+    letter-spacing: 1px;
+    margin-bottom: 6%;
+    letter-spacing: 1px;
+    color: #111;
+    font-family: 'Open Sans Condensed', sans-serif;
+    font-weight: 700;
+    line-height: 64px;
+    margin: 0 0 0;
+    padding: 20px 30px;
+    text-align: center;
+    text-transform: uppercase;
+    text-shadow: 2px 3px 3px #fff;
+}
+
+div#category_list_page {
+    padding: 0% 0 0 0;
+}
+
+div.webapp-content-category .content-block {
+    min-height: 90vh;
+    border-top: 1px solid #333;
+    padding: 0 0 18% 2%;
+}
+
+div#webapp-content div.content-block .category_title {
+    letter-spacing: 1px;
+    color: #111;
+    font-family: 'Open Sans Condensed', sans-serif;
+    font-size: 1em;
+    font-weight: 700;
+    line-height: 64px;
+    margin: 0 0 0;
+    padding: 20px 30px;
+    text-align: center;
+    text-transform: uppercase;
+    text-shadow: 2px 3px 3px #fff;
+}
+
+/* -- - - - - -- - - - for atoz page according to category page - - - -- - - - - */
+
+.atoz_img{
+    min-height: 180px;
+    max-width: 215px;
+    background-size: cover;
+    width: auto;
+    height: auto;
+    background-position: 50% 50%;
+    border-radius:10px 10px 0 0;
+}
+
+ .atoz_row
+ {
+    box-shadow: 0px 0px 10px 4px rgba(204, 204, 204, 0.75);
+    -moz-box-shadow: 0px 0px 10px 4px rgba(204, 204, 204, 0.75);
+    -webkit-box-shadow: 0px 0px 10px 4px rgba(204, 204, 204, 0.75);
+    background-color: #fff;
+    border-radius: 10px;
+    width: 45%;
+    float:left;
+    margin-left:3%;
+    text-align:left;
+    padding:0 0 3% 0;
+    margin-bottom:5%;
+ }
+
+ .atoz_row_wrap {
+    overflow: auto;
+    margin-bottom:17%;
+}
+
+.atoz_row_wrap_inner{
+    width: 100%;
+    margin:auto;
+}
+
+.atoz_row h4 {
+    color: #333;
+    text-align: left;
+    padding: 0 2% 0 8%;
+    line-height: 20px;
+    font-size: 0.7em;
+    /*min-height: 40px;*/
+    padding: 6% 0 5% 8% !important;
+}
+
+
+.atoz_row a.atoz_download {
+    color: red;
+    font-size: 0.8em;
+    margin-left: 8%;
+}
+
+
+.rating { 
+  border: none;
+  float: left;
+  padding: 0% 0 0 5% ;
+}
+
+.rating > input { display: none; } 
+.rating > label:before { 
+  margin: 5px;
+  font-size: 1.25em;
+  font-family: FontAwesome;
+  display: inline-block;
+  content: "\2605";
+}
+
+.rating > .half:before { 
+  content: "\2605";
+  position: absolute;
+}
+
+.rating > label { 
+  color: #ddd; 
+ float: right; 
+}
+
+.atoz_rate_div {
+    width: 100%;
+    padding: 0 0 23% 0;
+}
+
+.rate_submit {
+    font-size: 0.8em;
+    letter-spacing: 1px;
+    width: 40%;
+    float: right;
+    vertical-align: middle;
+    padding: 4% 0 0 0;
+}
+
+.rate_submit a {
+    background-color: #333;
+    color: #ecdf16;
+    padding: 2% 7% 1% 7%;
+    border-radius: 5px;
+    border: 1px solid yellow;
+}
+
+.rate_submit a:hover {
+    cursor: pointer;
+}
+
+/***** CSS Magic to Highlight Stars on Hover *****/
+
+.rating > input:checked ~ label, /* show gold star when clicked */
+.rating:not(:checked) > label:hover, /* hover current star */
+.rating:not(:checked) > label:hover ~ label { color: #FFD700;  } /* hover previous stars in list */
+
+.rating > input:checked + label:hover, /* hover current star when changing rating */
+.rating > input:checked ~ label:hover,
+.rating > label:hover ~ input:checked ~ label, /* lighten current selection */
+.rating > input:checked ~ label:hover ~ label { color: #FFED85;  } 
+
+
+body.not-logged-in .rating:not(:checked) > label:hover{
+    color: #ccc;
+}
+
+
+
+/* - - - -- - - - - - -- - -- - atoz detail page - - - - -- - -  - - -- - - - - - - - -- */
+div.atoz_detail div.atoz_image{
+    min-height: 300px;
+    max-width: 480px;
+    background-size: cover !important;
+    width: auto;
+    height: auto;
+    background-position: 50% 50% !important;
+} 
+
+.atoz_detail img {
+    width: 100%;
+    /* height: auto; */
+    height: 300px;
+}
+
+body.page-webapp-detail-atoz div.content-block{
+    background-color: #fff;
+    overflow:auto;
+    border-top: 1px solid #fff;
+}
+
+div.atoz_downlaod a{ 
+    position:relative;
+    width: auto;
+    color:#ecf0f1;
+    text-decoration:none;
+    border-radius:10px;
+    border:solid 1px #cb2a18;
+    background:#cb2a18;
+    text-align:center;
+    padding:2% 8% 2% 8%;
+    font-size: 1em;
+    letter-spacing:1px;
+     -webkit-transition: all 0.1s;
+    -moz-transition: all 0.1s;
+    transition: all 0.1s;
+
+    -webkit-box-shadow: 0px 6px 0px #a40337;
+    -moz-box-shadow: 0px 6px 0px #a40337;
+    box-shadow: 0px 6px 0px #a40337;
+}
+
+div.atoz_detail .atoz_image {
+   margin: 0 0 7% 0;
+}
+
+div.atoz_detail .atoz_block{
+   width: 90%;
+   margin:auto;
+}
+div.atoz_detail .atoz_block h4{
+   color: #333;
+   text-align:left;
+   font-size: 1.1em;
+   font-weight:bold;
+   letter-spacing:1px;
+   margin:12% 0 0 0 ;
+} 
+
+div.atoz_detail p.desc {
+    color: #333;
+    text-align: left;
+    font-size: 0.9em;
+}
+
+div.atoz_detail .stars.stars-example-css{
+     left:0px;
+     position:relative;
+}
+
+/* ============= similar atoz in detail page ==================== */
+.similar_atozs {
+    background-color: #efefef !important;
+    overflow: auto;
+    padding:3% 0 24% 5%;
+}
+
+
+div.similar_atozs .similar_inner {
+    width: 45%;
+    float: left;
+    box-shadow: 0px 0px 10px 4px rgba(204, 204, 204, 0.75);
+    -moz-box-shadow: 0px 0px 10px 4px rgba(204, 204, 204, 0.75);
+    -webkit-box-shadow: 0px 0px 10px 4px rgba(204, 204, 204, 0.75);
+    background-color: #fff;
+    border-radius: 10px;
+    text-align: left;
+    padding:0 0 8% 0 ;
+    margin-right: 4%;
+}
+
+div.similar_atozs .similar_inner h3 {
+    color: #333;
+    font-size: 0.8em;
+    padding:0 0 0 5%;
+}
+
+div.similar_atozs .similar_inner a {
+    color: red;
+    font-size: 0.8em;
+    margin-left: 5%;
+}
+
+div.similar_atozs h3:first-child{
+    letter-spacing: 1px;
+    color: #111;
+    font-family: 'Open Sans Condensed', sans-serif , zawgyi;
+    font-size: 1em;
+    line-height: 64px;
+    margin: 0 0 0;
+    text-align: left;
+    text-transform: uppercase;
+    text-shadow: 2px 3px 3px #fff;
+}
+
+/* --- - - - - - - - - --  atoz deatil page stars - - - -- -- - - - */
+/* for rating five */
+.rating > #five ~ label{
+    color: #FFD700
+}
+/* for rating four */
+.rating > #four ~ label{
+    color: #FFD700
+}
+
+/* for rating three */
+.rating > #three ~ label{
+    color: #FFD700
+}
+
+/* for rating two */
+.rating > #two ~ label{
+    color: #FFD700
+}
+
+/* for rating one */
+.rating > #one ~ label{
+    color: #FFD700
+}
+
+body.page-webapp-atoz .rating > label:before {
+    margin: 5px;
+    font-size: 1em;
+    font-family: FontAwesome;
+    display: inline-block;
+    content: "\2605";
+}
+
+body.page-webapp-detail-atoz fieldset.rating {
+    padding: 0 0 0 0 !important;
+}
+
+body.page-webapp-detail-atoz .atoz_rate_div {
+    width: 100%;
+    padding: 0 0 12% 0 !important;
+}
+
+body.not-logged-in .rating {
+    border: none;
+    float: left;
+    padding: 0% 0 0 0% !important;
+}
+
+/* before login as user in atoz detail page */
+
+
+p.get_rating {
+    color: red;
+}
+
+/*/ / / / / / / / / / / / / / / / /  responsive / / / / / / / / / / /. / / / / / / */
+@media (min-width: 320px) and (max-width: 340px) {
+
+       /* ============== atoz slider image =============== */
+        .swiper-slide img {
+            width: 100% !important;
+            height: auto;
+        }
+
+
+
+       /* = = = = = = = == home page = = = = = = = = = = == = */
+        body.front .atoz-category{
+            width: 43%;
+            float: left;
+            height: 167px;
+            background-repeat: no-repeat;
+            border: 4px solid #fff;
+            border-radius: 5px;
+            margin: 0 1% 4% 1%;
+            background-position: 50%;
+            background-size: cover;
+            background-color: #fff;
+            padding: 1% 0 0 0;
+        }
+
+        body.front div#atoz_category{
+            padding: 4% 2% 10% 2%;
+        }
+
+        /* ============== category page ================= */
+        body.page-webapp-category .atoz-category{
+            width: 43%;
+            float: left;
+            height: 167px;
+            background-repeat: no-repeat;
+            border: 4px solid #fff;
+            border-radius: 5px;
+            margin: 0 1% 4% 1%;
+            background-position: 50%;
+            background-size: cover;
+            background-color: #fff;
+            padding: 1% 0 0 0;
+        }
+
+        body.page-webapp-category div#atoz_category{
+            padding: 4% 2% 10% 2%;
+        }
+
+        body.page-webapp-category div#category_list_page {
+            padding: 0% 0 0 0;
+            overflow: auto;
+        }
+
+        body.page-webapp-category div#category_list_page {
+            padding: 0% 0 4% 0;
+            overflow: auto;
+        }
+
+        /* =================== singup page ======================== */
+        #webapp-wrapper .my-atoz-sign-up-facebook {
+            clear: both;
+            background: url(/sites/all/modules/atoz/images/facebook_badge.png) no-repeat;
+            background-size: auto 75%;
+            background-position: 0.2em center;
+            border-radius: 0.25em;
+            background-color: #3b5998;
+            border: 2px solid #3b5998;
+            box-shadow: 5px 5px 5px #aaa;
+            padding: 5% 5% 5% 17% !important;
+            color: #fff;
+            font-size: 0.9em !important;
+        }
+
+        #webapp-wrapper .my-atoz-sign-up-text {
+            margin: 0 0 20% 0 !important;
+            text-align: center;
+            font-size: 1em !important;
+        }
+
+        /* ================== footer ============================== */
+        #webapp-footer {
+            bottom: 0;
+            font-size: 0.75em;
+            text-align: center;
+            color: #777;
+            padding: 2% 0 2% 0;
+            background: #fff;
+            width: 100% !important;
+            position: fixed;
+            box-shadow: 0 -5px 10px -5px #ccc;
+            text-align: center;
+        }
+
+}
+
+
+@media (min-width: 340px) and (max-width: 359px) {
+
+        /* ============== atoz slider image =============== */
+        .swiper-slide img {
+            width: 100% !important;
+            height: auto;
+        }
+
+       /* = = = = = = = == home page = = = = = = = = = = == = */
+        body.front .atoz-category{
+            width: 43%;
+            float: left;
+            height: 167px;
+            background-repeat: no-repeat;
+            border: 4px solid #fff;
+            border-radius: 5px;
+            margin: 0 1% 4% 1%;
+            background-position: 50%;
+            background-size: cover;
+            background-color: #fff;
+            padding: 4% 0 0 0;
+        }
+
+        body.front div#atoz_category{
+            padding: 4% 2% 10% 2%;
+        }
+
+        /* ============== category page ================= */
+        body.page-webapp-category .atoz-category{
+            width: 43%;
+            float: left;
+            height: 167px;
+            background-repeat: no-repeat;
+            border: 4px solid #fff;
+            border-radius: 5px;
+            margin: 0 1% 4% 1%;
+            background-position: 50%;
+            background-size: cover;
+            background-color: #fff;
+            padding: 3% 0 0 0;
+        }
+
+        body.page-webapp-category div#atoz_category{
+            padding: 4% 2% 10% 2%;
+        }
+
+        body.page-webapp-category div#category_list_page {
+            padding: 0% 0 0 2%;
+            overflow: auto;
+        }
+
+        body.page-webapp-category div#category_list_page {
+            padding: 0% 0 4% 0;
+            overflow: auto;
+        }
+
+
+        /* =================== singup page ======================== */
+        #webapp-wrapper .my-atoz-sign-up-facebook {
+            clear: both;
+            background: url(/sites/all/modules/atoz/images/facebook_badge.png) no-repeat;
+            background-size: auto 75%;
+            background-position: 0.2em center;
+            border-radius: 0.25em;
+            background-color: #3b5998;
+            border: 2px solid #3b5998;
+            box-shadow: 5px 5px 5px #aaa;
+            padding: 5% 5% 5% 17% !important;
+            color: #fff;
+            font-size: 0.9em !important;
+        }
+
+        #webapp-wrapper .my-atoz-sign-up-text {
+            margin: 0 0 20% 0 !important;
+            text-align: center;
+            font-size: 1em !important;
+        }
+
+        /* ================== footer ============================== */
+        #webapp-footer {
+            bottom: 0;
+            font-size: 0.75em;
+            text-align: center;
+            color: #777;
+            padding: 2% 0 2% 0;
+            background: #fff;
+            width: 100% !important;
+            position: fixed;
+            box-shadow: 0 -5px 10px -5px #ccc;
+            text-align: center;
+        }
+
+}
+
+@media (min-width: 360px) and (max-width: 375px) {
+
+      /* ============== atoz slider image =============== */
+        .swiper-slide img {
+            width: 100% !important;
+            height: auto;
+        }
+
+       /* = = = = = = = == home page = = = = = = = = = = == = */
+
+     div.atoz_category_img img{
+            width: 94px;
+            height: auto;
+            border: 4px solid orange;
+            border-radius: 7px;
+     }
+
+     div.atoz_category_img img{
+            width: 94px !important;
+            height: auto !important;
+            border: 4px solid orange;
+            border-radius: 7px;
+     }
+
+    body.front .atoz-category{
+            width: 29%;
+            float: left;
+            height: 153px !important;
+            background-repeat: no-repeat;
+            border: 4px solid #fff;
+            border-radius: 5px;
+            margin: 0 1% 4% 1%;
+            background-position: 50%;
+            background-size: cover;
+            background-color: #fff;
+            padding: 1% 0 0 0;
+    }
+
+    /* ================== category page ======================== */
+    body.page-webapp-category .atoz-category{
+        height: 153px !important;
+    }
+
+    body.page-webapp-category div#category_list_page {
+            padding: 0% 0 4% 0;
+            overflow: auto;
+    }
+
+    
+    /* =================== singup page ======================== */
+    #webapp-wrapper .my-atoz-sign-up-facebook {
+        clear: both;
+        background: url(/sites/all/modules/atoz/images/facebook_badge.png) no-repeat;
+        background-size: auto 75%;
+        background-position: 0.2em center;
+        border-radius: 0.25em;
+        background-color: #3b5998;
+        border: 2px solid #3b5998;
+        box-shadow: 5px 5px 5px #aaa;
+        padding: 5% 5% 5% 17% !important;
+        color: #fff;
+        font-size: 0.9em !important;
+    }
+
+    #webapp-wrapper .my-atoz-sign-up-text {
+        margin: 0 0 20% 0 !important;
+        text-align: center;
+        font-size: 1em !important;
+    }
+
+    /* ================== footer ============================== */
+    #webapp-footer {
+        bottom: 0;
+        font-size: 0.75em;
+        text-align: center;
+        color: #777;
+        padding: 2% 0 2% 0;
+        background: #fff;
+        width: 100% !important;
+        position: fixed;
+        box-shadow: 0 -5px 10px -5px #ccc;
+        text-align: center;
+    }
+
+
+
+}
+
+@media (min-width: 376px) and (max-width: 425px) {
+
+     /* ============== atoz slider image =============== */
+        .swiper-slide img {
+            width: 100% !important;
+            height: auto;
+        }
+
+       /* = = = = = = = == home page = = = = = = = = = = == = */
+
+    /* ================= home page ==================== */
+    body.front  div.atoz_category_img img{
+             width: 80% !important;
+             height: auto !important;
+            border: 4px solid orange;
+            border-radius: 7px;
+     }
+
+    body.front .atoz-category{
+            width: 29% !important;
+            float: left;
+            height: 143px !important;
+            background-repeat: no-repeat;
+            border: 4px solid #fff;
+            border-radius: 5px;
+            margin: 0 1% 4% 1%;
+            background-position: 50%;
+            background-size: cover;
+            background-color: #fff;
+            padding: 1% 0 0 0;
+    }
+
+
+    /* =================== category page ====================== */
+    body.page-webapp-category .atoz-category{
+            width: 29% !important;
+            float: left;
+            overflow : auto;
+            background-repeat: no-repeat;
+            border: 4px solid #fff;
+            border-radius: 5px;
+            margin: 0 1% 4% 1%;
+            background-position: 50%;
+            background-size: cover;
+            background-color: #fff;
+            padding: 1% 0 0 0;
+    }
+
+    body.page-webapp-category div.atoz_category_img img {
+            border: 4px solid orange;
+            border-radius: 7px;
+            width: 90% !important;
+            height: auto !important;
+    }
+
+    div#category_list_page {
+            padding: 0% 0 0 0;
+            overflow: auto;
+    }
+
+
+    /* =================== singup page ======================== */
+    #webapp-wrapper .my-atoz-sign-up-facebook {
+            clear: both;
+            background: url(/sites/all/modules/atoz/images/facebook_badge.png) no-repeat;
+            background-size: auto 75%;
+            background-position: 0.2em center;
+            border-radius: 0.25em;
+            background-color: #3b5998;
+            border: 2px solid #3b5998;
+            box-shadow: 5px 5px 5px #aaa;
+            padding: 5% 5% 5% 17% !important;
+            color: #fff;
+            font-size: 0.9em !important;
+    }
+
+    #webapp-wrapper .my-atoz-sign-up-text {
+        margin: 0 0 20% 0 !important;
+        text-align: center;
+        font-size: 1em !important;
+    }
+
+       
+}
+
+

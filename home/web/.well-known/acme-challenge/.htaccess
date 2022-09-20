@@ -1,0 +1,4 @@
+Options -Indexes
+# allows any user to see this directory
+Allow from all
+Satisfy Any

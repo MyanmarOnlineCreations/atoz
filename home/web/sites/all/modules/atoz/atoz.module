@@ -1,0 +1,233 @@
+<?php
+
+define ('ATOZ_ENGLISH', '0');
+define ('ATOZ_BURMESE', '1');
+
+define ('ATOZ_MALE', '1');
+define ('ATOZ_FEMALE', '2');
+
+define ("MYPY_APPID", "2000"); // payment portal
+define ("atoz_APPID", "2006"); 
+
+define ('ATOZ_DEBUG',  '0');
+
+define ('ATOZ_USER_FILTER_TEXT', 'ATOZ_USER_FILTER_TEXT');
+
+define ('ATOZ_IMAGE_PATH', '/sites/default/files/atoz/images/');
+
+define ('ATOZ_DEFAULT_PROFILE_IMAGE', "/sites/all/modules/atoz/images/profile.png");
+
+define ("ATOZ_SITE_NAME", "Royal AtoZ Holding Co_Ltd");
+
+define('ATOZ_USER_ID_FILTER', 'ATOZ_USER_ID_FILTER');
+
+
+$debug = 0;
+
+if ($debug) {
+    define ('ATOZ_DEBUG_MODE',  '1');
+}
+else {
+    define ('ATOZ_DEBUG_MODE',  '0');
+}
+
+$prelaunch = 1;
+
+if ($prelaunch) {
+    define ('ATOZ_PRELAUNCH',  '1');
+}
+else {
+    define ('ATOZ_PRELAUNCH',  '0');
+}
+
+
+
+//define ("MYGM_GAMEGABAR_DEBUG_SIGNIN", "https://gamegabar.com/webapp/signin");
+//echo "server name =" . $_SERVER["SERVER_NAME"];
+if (strpos ($_SERVER["SERVER_NAME"], "myhome") !== FALSE) {
+    //define ('MYGM_FACEBOOK_APPID', '173187003254598'); // mygame
+    define ('ATOZ_DEFAULT_TIMEZONE', 'America/Toronto');
+    define ('ATOZ_LOCAL_FILESTORAGE', '1');
+    define ("ATOZ_PAYMENT_PORTAL", "http://mykiwi.com");
+    define ("ATOZ_APP_LOGO", "http://myhome.com/sites/all/modules/atoz/images/webapp_logo.png");
+    //define ("MYGM_GAMEGABAR_SIGNIN", "http://mylime.com/webapp/signin");
+    define('ATOZ_SERVER_NAME', 'http://myhome.com');
+
+}
+else if (strpos ($_SERVER["SERVER_NAME"], "subwaycoupons.myanmaronlinecreations.com") !== FALSE) {
+    define ('ATOZ_DEFAULT_TIMEZONE', 'Asia/Rangoon');
+    //define ('ATOZ_FACEBOOK_APPID', '478656885837382'); // game
+    define ('ATOZ_LOCAL_FILESTORAGE', '1');
+    define ("ATOZ_PAYMENT_PORTAL", "https://ezdin-gar.myanmaronlinecreations.com");
+    define ("ATOZ_APP_LOGO", "https://subwaycoupons.myanmaronlinecreations.com/sites/all/modules/atoz/images/webapp_logo.png");
+    //define ("ATOZ_GAMEGABAR_SIGNIN", "http://gamegabar.myanmaronlinecreations.com/webapp/signin");
+    define('ATOZ_SERVER_NAME', 'https://subwaycoupons.myanmaronlinecreations.com');
+
+}
+else {
+    define ('ATOZ_DEFAULT_TIMEZONE', 'Asia/Rangoon');
+    define ('ATOZ_FACEBOOK_APPID', '675158052681550'); // game
+    define ('ATOZ_LOCAL_FILESTORAGE', '0');
+    define ("ATOZ_PAYMENT_PORTAL", "https://ezdin-gar.com");
+    define ("ATOZ_APP_LOGO", "https://atoz.com/sites/all/modules/atoz/images/webapp_logo.png");
+    define ("ATOZ_GAMEGABAR_SIGNIN", "https://atoz.com/api/moc/cgredirect.php");
+    define('ATOZ_SERVER_NAME', 'https://subwaycoupons.com');
+
+}
+
+function atoz_permission() {
+	return array(
+	'atoz admin' => array(
+		'title' => 'atoz admin',
+		'description' => 'General atoz maintenance',
+		),
+	'view atoz' => array(
+		'title' => 'View atoz',
+		'description' => 'Allow anyone to view atoz content',
+		),
+	
+
+	);
+}
+
+function atoz_menu() {
+	$items['atoz'] = array(
+		'title' => 'atoz',
+		'page callback' => 'atoz_page',
+		'access arguments' => array('atoz admin'),
+		'type' => MENU_CALLBACK
+	);
+	$items['home'] = array(
+        	'title' => 'admin page',
+        	'page callback' => 'atoz_home_page',
+        	'access arguments' => array('view atoz'),
+        	'type' => MENU_CALLBACK
+    	);
+
+	$items['webapp'] = array(
+		'title' => 'Members',
+		'page callback' => 'atoz_webapp_page',
+		'access arguments' => array('view atoz'),
+		'type' => MENU_CALLBACK
+	);
+
+	$items['api'] = array(
+        'title' => 'API',
+        'page callback' => 'atoz_api_page',
+        'access arguments' => array('view atoz'),
+        'type' => MENU_CALLBACK
+    );
+    
+
+	return $items;
+}
+
+function atoz_form_alter (&$form, &$form_state, $form_id) {
+
+    global $user;
+
+    if ($user->uid == 1 || count ($user->roles) > 1) { // don't let facebook users update this only admins
+        // if guest, admin or has a role do nothing
+        // there is always a default single role of authenticated user so we test for > 1
+    }
+    else {
+        if ($form_id == "user_register_form") {
+            drupal_goto ("webapp");
+        }
+        else if ($form_id == "user_pass") {
+            drupal_goto ("webapp");
+        }
+    }
+}
+
+function atoz_user_view_alter (&$build) {
+    global $user;
+
+    if (!$user->uid || $user->uid == 1 || count ($user->roles) > 1) { // don't let facebook users update this only admins
+        // if guest, admin or has a role do nothing
+        // there is always a default single role of authenticated user so we test for > 1
+
+    }
+    else {
+        drupal_goto ("webapp");
+    }
+}
+
+
+function atoz_init() {
+  if ($_GET['q'] == 'system/ajax') {
+        require_once ("includes/atoz_content.inc");
+  }
+}
+
+function atoz_home_page ($parameter1=NULL, $parameter2=NULL, $parameter3=NULL, $parameter4=NULL, $parameter5=NULL, $parameter6=NULL, $parameter7=NULL) {
+    global $user;
+    require_once ("includes/atoz_util.inc");
+   // require_once ("includes/atoz_content.inc");
+    //echo "aaa";exit();
+    if ($user->uid) {
+        drupal_goto ("atoz");
+        
+    }
+
+    //return atoz_webapp_content ($parameter1, $parameter2, $parameter3, $parameter4, $parameter5);
+
+}
+
+function atoz_webapp_page ($parameter1=NULL, $parameter2=NULL, $parameter3=NULL, $parameter4=NULL, $parameter5=NULL, $parameter6=NULL, $parameter7=NULL) {
+	
+	global $user;
+	if ($user->uid) {
+          if (in_array('super admin', $user->roles) || in_array('staff admin', $user->roles) ){
+            drupal_goto ("atoz");
+          }  
+	}  
+	require_once ("includes/atoz_util.inc");
+	require_once ("includes/atoz_webapp.inc");
+	return atoz_webapp ($parameter1, $parameter2, $parameter3, $parameter4, $parameter5, $parameter6, $parameter7);
+}
+
+function atoz_api_page ($parameter1=NULL, $parameter2=NULL, $parameter3=NULL, $parameter4=NULL, $parameter5=NULL) {
+    require_once ("includes/atoz_util.inc");
+    require_once ("includes/atoz_api.inc");
+
+    return atoz_api_lists($parameter1, $parameter2, $parameter3, $parameter4, $parameter5);
+}
+
+function atoz_page ($parameter1=NULL, $parameter2=NULL, $parameter3=NULL, $parameter4=NULL, $parameter5=NULL, $parameter6=NULL) {
+    require_once ("includes/atoz_util.inc");
+    require_once ("includes/atoz_admin.inc");
+
+    atoz_admin_init ();
+    return atoz ($parameter1, $parameter2, $parameter3, $parameter4, $parameter5, $parameter6);
+}
+
+
+function atoz_mail ($key, &$message, $params) {
+	$message["subject"] = $params["subject"];
+	$message["body"][] = $params["html"];
+
+	if (isset ($params['headers'])) {
+    	$message['headers'] += $params['headers'];
+    }
+
+	$message["headers"]['Content-Type'] = 'text/html; charset=iso-8859-1';
+
+	//error_log (print_r ($message, true));
+}
+
+function atoz_theme () {
+    return array (
+       'atoz_thumb_upload' => array(
+        'render element' => 'element',
+        'file'           => 'atoz.module',
+    ));
+}
+
+function atoz_user_login ($edit, $user) {
+    if (isset ($edit["validate_redirect"])) {
+        drupal_goto ($edit["validate_redirect"]);
+    }
+}
+
+

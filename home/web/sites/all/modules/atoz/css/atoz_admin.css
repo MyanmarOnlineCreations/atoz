@@ -1,0 +1,253 @@
+    font-family: zawgyi;
+    src: url("/sites/all/fonts/Zawgyi.woff") format('woff');
+}
+
+body {
+    font-family: zawgyi, Roboto, Arial, Georgia, "Times New Roman", Times, serif !important;
+}
+
+input {
+    font-family: zawgyi, Roboto, Arial, Georgia, "Times New Roman", Times, serif !important;
+}
+
+
+fieldset legend span {
+    font-weight: bold;
+    font-size: 1.3em;
+    line-height: auto;
+}
+
+fieldset legend {
+    height: auto;
+}
+
+fieldset {
+    clear: both;
+    padding: 0 1em 1em 1em;
+}
+
+.fieldset-wrapper {
+    margin-top: 3em;
+}
+
+.my-atoz_table {
+  width: 100%;
+}
+
+#logo {
+    max-height: 100px;
+}
+
+.my-atoz-form-header {
+    clear: both;
+}
+
+.my-atoz-admin-table .center {
+    text-align: center;
+}
+
+.my-atoz-odd {
+  background-color: #fafafa;
+}
+
+.my-atoz-even {
+  background-color: #f0f0f0;
+}
+
+.my-atoz-table-header {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-top: 1em;
+}
+
+#my-atoz-admin-table th {
+    text-align: center;
+}
+
+.my-atoz-cell-icon {
+    text-align: center;
+}
+
+.my-atoz-cell-icon img{
+    width: 20px;
+}
+
+
+.my-atoz-cell-center {
+    text-align: center;
+}
+
+.my-atoz-cell-right {
+    text-align: right;
+    margin-right: 10%;
+}
+
+#profile-image {
+    float: left;
+    overflow: hidden;
+    padding-top: 20px;
+}
+
+#profile-image img {
+   max-height: 250px;
+   height: 100%;
+}
+
+.my-atoz-add-link {
+    float: right;
+}
+
+.my-atoz-form-header {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+form #edit-name {
+    padding-top: 10px;
+}
+
+form  #edit-name label {
+    float: left;
+    margin-right: 10px;
+    padding-top: 7px;
+}
+
+#pick-image img,
+#pick-image2 img {
+    max-height: 100px;
+}
+
+.plupload-element {
+    display: none;
+}
+
+.my-atoz-admin-series-list-title{
+    float: left;
+    margin-bottom: 1em;
+    clear: both;
+}
+
+.my-atoz-admin-series-title {
+    font-weight: bold;
+    font-size: 1.5em;
+    color: #e82b54;
+}
+
+
+.my-atoz-admin-season-list-title {
+    margin-bottom: 1em;
+    float: right;
+}
+
+.my-atoz-admin-season-title {
+    font-weight: bold;
+    font-size: 1.5em;
+    color: #47bf80;
+}
+
+.my-atoz-list-header {
+    clear: both;
+}
+
+.page-movie-category h1.title {
+    color: #5091bc
+}
+
+.page-movie-category th {
+    background-color: #5091bc
+}
+
+.page-movie-series h1.title {
+    color: #e82b54
+}
+
+.page-movie-series th {
+    background-color: #e82b54
+}
+
+.page-movie-season h1.title {
+    color: #47bf80
+}
+
+.page-movie-season th {
+    background-color: #47bf80
+}
+
+.page-movie-episode h1.title {
+    color: #a053a0
+}
+
+.page-movie-episode th {
+    background-color: #a053a0
+}
+
+div.messages.error{
+     display:none !important; 
+}
+
+canvas#myChart {
+    width: 55% !important;
+    height: 30% !important;
+}
+#atoz-overview-filter .form-type-select {
+    float: left;
+    margin-right: 10px;
+    width: 170px;
+}
+#edit-submit{
+    margin-top: 20px;
+}
+
+/*consumer Filter*/
+
+#my-atoz-user-filter{
+    padding-top:5%;
+}
+
+#my-atoz-user-filter .form-type-textfield,
+#my-atoz-user-filter .form-type-select{
+    float: left;
+    margin-right: 10px;
+    width: 300px;
+}
+
+#my-atoz-user-filter .form-type-textfield input,
+#my-atoz-user-filter .form-type-select input
+{
+    width: 90%;
+    color: #000;
+}
+
+#my-atoz-user-filter input.form-submit {
+    margin-top: 1.75em;
+    margin-bottom: 0em;
+}
+
+    
+#my-atoz-user-filter .container-inline-date
+ {
+    clear: none !important;
+}
+
+.form-item.form-type-textfield.form-item-dob-date label {
+    display: none;
+}
+.frm_promo_div label {
+    display: contents;
+}
+
+#my-atoz-redeem-filter-form .form-item-member-tier{
+  float:left;
+  width:150px;
+}
+
+#my-atoz-redeem-filter-form .form-item-redeem-date{
+  float:left;
+  margin-left:
+}
+#my-atoz-redeem-filter-form .container-inline-date{
+  clear:right;
+}
+#my-atoz-redeem-filter-form .form-item-redeem-date-date label,#my-atoz-redeem-filter-form .description{
+    display: none;
+}
