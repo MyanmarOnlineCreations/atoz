@@ -1,13 +1,21 @@
-    font-family: zawgyi;
+font-family: zawgyi;
     src: url("/sites/all/fonts/Zawgyi.woff") format('woff');
 }
 
+font-family: unicode;
+    src: url("/sites/all/fonts/NotoSansMyanmar-Regular") format('ttf');
+}
+
 body {
-    font-family: zawgyi, Roboto, Arial, Georgia, "Times New Roman", Times, serif !important;
+    font-family:  Roboto, Arial, Georgia, "Times New Roman", Times, serif !important;
 }
 
 input {
-    font-family: zawgyi, Roboto, Arial, Georgia, "Times New Roman", Times, serif !important;
+    font-family:  Roboto, Arial, Georgia, "Times New Roman", Times, serif !important;
+}
+
+textarea{
+    font-family: unicode, Arial, Georgia, "Times New Roman", Times, serif !important;
 }
 
 
@@ -113,7 +121,7 @@ form  #edit-name label {
 }
 
 #pick-image img,
-#pick-image2 img {
+#pick-imagemm img {
     max-height: 100px;
 }
 
@@ -221,6 +229,14 @@ canvas#myChart {
 #my-atoz-user-filter input.form-submit {
     margin-top: 1.75em;
     margin-bottom: 0em;
+    
+}
+#edit-reset,
+#edit-submit,
+#edit-save,
+#edit-reject,
+.frm_promo_div .form-submit {
+  font-family: zawgyi,Roboto, Arial, Georgia, "Times New Roman", Times, serif !important;
 }
 
     
@@ -229,16 +245,9 @@ canvas#myChart {
     clear: none !important;
 }
 
-.form-item.form-type-textfield.form-item-dob-date label {
-    display: none;
-}
-.frm_promo_div label {
-    display: contents;
-}
-
 #my-atoz-redeem-filter-form .form-item-member-tier{
   float:left;
-  width:150px;
+  width:100px;
 }
 
 #my-atoz-redeem-filter-form .form-item-redeem-date{
@@ -248,6 +257,115 @@ canvas#myChart {
 #my-atoz-redeem-filter-form .container-inline-date{
   clear:right;
 }
-#my-atoz-redeem-filter-form .form-item-redeem-date-date label,#my-atoz-redeem-filter-form .description{
+#my-atoz-redeem-filter-form .form-item-redeem-date-date label,#my-atoz-redeem-filter-form .description  {
     display: none;
+}
+
+#my-atoz-member-report-filter-form .form-item-member-id{
+  width:260px;
+  float:left;
+}
+#my-atoz-member-report-filter-form .form-item-member-level{
+  width:100px;
+  float:left;
+}
+#my-atoz-member-report-filter-form .form-item-member-id input,#my-atoz-member-report-filter-form .form-item-frequnecy input{
+  width:240px;
+}
+
+#my-atoz-member-report-filter-form .form-item-frequnecy{
+  float:left;
+  margin-right:10px;
+}
+
+#my-atoz-point-report-filter-form .form-item-filter-date-date label,#my-atoz-point-report-filter-form .form-item-filter-date-date .description{
+  display:none;
+  float:left;
+  width:200px;
+}
+#my-atoz-redeem-report-filter-form  .container-inline-date, #my-atoz-point-report-filter-form .container-inline-date{
+  float:left;
+}
+#my-atoz-point-report-filter-form .form-item-member-id{
+  width:220px;
+  float:left;
+}
+#my-atoz-point-report-filter-form .form-item-member-id input{
+  width:200px;
+}
+#my-atoz-point-report-filter-form .form-item-member-level{
+  float:left;
+  margin-right:10px;
+}
+
+#my-atoz-redeem-report-filter-form .form-item-member-id{
+  width:220px;
+  float:left;
+}
+#my-atoz-redeem-report-filter-form .form-item-member-id input{
+  width:200px;
+}
+#my-atoz-redeem-report-filter-form .form-item-member-level{
+  float:left;
+  margin-right:10px;
+}
+#my-atoz-redeem-report-filter-form .form-item-outlet{
+  float:left;
+  margin-right:10px;
+}
+#my-atoz-redeem-report-filter-form .form-item-filter-date-date label,.form-item-filter-date-date .description{
+  display:none;
+}
+
+.frm_promo_div label {
+    display: contents;
+}
+
+
+.form-item-dob-date label,.form-item-dob-date .description{
+    display: none;
+}
+.downlod-csv{
+    float: right;
+    margin-right: 5px;
+}
+
+#my-atoz-point-report-filter-form .form-item-member-type{
+  float:left;
+  margin-right:2px;
+}
+
+#main, #header div.section{
+    width: 80% !important;
+}
+
+#my-atoz-user-filter-form .form-item-user-id{
+  width:250px;
+  float:left;
+}
+
+#my-atoz-user-filter-form .form-item-user-id input{
+  width:230px;
+}
+
+#my-atoz-user-filter-form .form-item-city {
+  float:left;
+  margin-right:10px;
+}
+#my-atoz-user-filter-form .form-item-township{
+  float:left;
+  margin-right:10px;
+}
+
+#my-atoz-member-report-filter-form .form-item-city{
+  float:left;
+  margin-right:10px;
+}
+input {
+    padding-top:8px;
+    padding-bottom:8px;
+}
+
+#my-atoz-redeem-report-filter-form .form-item,#my-atoz-point-report-filter-form .form-item{
+  margin-top:0;
 }

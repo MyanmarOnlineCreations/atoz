@@ -17,36 +17,42 @@
 		global $user;
 
 		$output="";	
-		$offset = 0;
 		$link = $_SERVER["REQUEST_URI"];
 		$rowsPerPage = 100;
 		$dataPerRow = 1;
+		$offset = atoz_admin_page_offset($rowsPerPage);		
+		
     	$data = array();
 
 		$sortOptions = array (
-			"default"			=> "created_date",
-			"name"				=> "",
-			"created_date"  	=> "desc",
-			"township"			=> "",
-			"city"				=> "",
-			
+			"default"			=> "name",
+			"name"				=> "desc",
+			"member_level"		=> "desc",
+			"created_date" 		=> "desc"
 		);
 
 		$styleArray = array (
+			"",
 			"",
 			"",
 			"",	
 		);
 
 		$headerFields = array (
-			"Name"      	   => "name",
-	        "Membership Level" => "member_level",
-	        "Action"		   => ""
+			t("Name" )     	   		=> "name",
+	        t("Membership Level") 	=> "member_level",
+	        t("Creation Date")				=> "created_date",
+	        t("Action")		   		=> ""
 		);
 
 		$query = db_select('tbl_home_members_info','m');
 		$query -> fields('m');
 		$query -> condition('m.status','1000');
+
+		$query->range($offset, $rowsPerPage);
+
+	  	atoz_checksort ($sortOptions, $query);
+	  	
 		$result = $query->execute();
 
 		$status_arr = atoz_member_status();
@@ -55,15 +61,29 @@
 
 		$member_level_arr = atoz_member_level();
 
+
 		if($result){
 
 			foreach($result as $row){
+
+				if($row->member_level == '' || $row->member_level == null){
+					$member_level = '';
+				}else{
+					$member_level = $member_level_arr[$row->member_level];
+				}
+
+				if($row->member_type == '' || $row->member_type == null){
+					$member_type = '';
+				}else{
+					$member_type = $member_type_arr[$row->member_type];
+				}
 				
 				$list['name'] = $row->name;
-				$list['member_level'] = $member_type_arr[$row->member_type] . ' / ' . $member_level_arr[$row->member_level];				
+				$list['member_level'] = $member_type . ' / ' . $member_level;	
+				$list['created_date'] = date('Y-m-d',strtotime($row->created_date));			
 				$list['action'] = '<a href="/atoz/account_verification/view/'.$row->gmid.'">View</a>';
 
-				$data[] = $list;				
+				$data[] = $list;		
 			}
 			
 		}
@@ -75,7 +95,7 @@
 
 		$pager = atoz_admin_pager_by_query($pageQuery,"m", "gmid", $dataPerRow, $rowsPerPage, $currentPage, $offset, $total);
 
-		$output .= '<h2 class="list_header"> Account Verification <span class="myst-admin-title-total">('.$total.')</span></h2>';
+		$output .= '<h2 class="list_header"> '.t('Account Verification').' <span class="myst-admin-title-total">('.$total.')</span></h2>';
 
 
 		$output .=  $pager . atoz_admin_create_table ("home-admin-table", $header, $data, $styleArray) . $pager;
@@ -92,7 +112,7 @@
 		$form = array('#id' => 'my-atoz-account-verification-edit');
 
 		$form['title'] = array (
-	      	'#markup' => 'Account Verification',
+	      	'#markup' => t('Account Verification'),
 	    );		
 
 		$form['name'] = array (
@@ -178,6 +198,7 @@
 	        '#type' => 'select',
 	        '#options' => $member_level_arr,
 	        '#default_value' => $data["member_level"],
+	        // '#required' => true,
 	    );	    
 
 	    $form['gmid'] = array(
@@ -188,12 +209,12 @@
 
 	    $form['save'] = array(
 		    '#type' => 'submit',
-		    '#value' => 'Approve',
+		    '#value' => t('Approve'),
 		);
 
 		$form['reject'] = array(
 		    '#type' => 'submit',
-		    '#value' => 'Reject',
+		    '#value' => t('Reject'),
 		);
 
 		return $form;
@@ -201,7 +222,13 @@
 	}
 
 	function myatoz_account_verification_form_validate($form, &$form_state){
+		if($form_state['values']['op'] == 'Approve'){
+			$member_level = $form_state['values']['member_level'];
 
+			if($member_level == ''){
+				form_set_error('member_level', t('Please choose member level'));
+			}
+		}
 	}
 
 	function myatoz_account_verification_form_submit($form, &$form_state){
@@ -214,7 +241,15 @@
 
 		$fields = array();
 
-		if($form_state['values']['op'] == 'Approve'){
+		$phone = $data['phone'];
+
+		// $phone = '09782816884';
+
+		$approve_message = 'Congratulation! Your Loyalty Program Membership Account has been created successfully.Your member ID is '.$data['gmid'] .'.';
+
+		$reject_message = 'We Apologize! Your account could not be created because we encountered an issue during account verification process.Please try again or contact customer service: 019123456, 09123456789 Sincerely,Royal A to Z Holdings Co., Ltd.';
+
+		if($form_state['values']['op'] == t('Approve')){
 
 			$fields['current_point'] = $data['current_point'];
 			$fields['member_level'] = $data['member_level'];
@@ -232,13 +267,16 @@
 	        	->key(array("name"=>$data['gmid']))
 	            ->fields (array('status'=>1))
 	            ->execute();
+
+				send_sms_brix($phone,$approve_message);
 				
 	        	drupal_set_message('Successfully varified');
 
 			}catch(Exception $e){
 	        	 drupal_set_message($e->getMessage(), 'Err');
 			}
-		}else if($form_state['values']['op'] == 'Reject'){
+
+		}else if($form_state['values']['op'] == t('Reject')){
 
 			$fields['status'] = '1002'; //reject
 			$fields['member_level'] = $data['member_level'];
@@ -249,12 +287,15 @@
 	        	->key(array("gmid"=>$data['gmid']))
 	            ->fields ($fields)
 	            ->execute();
+
+				send_sms_brix($phone,$reject_message);
 				
 	        	drupal_set_message('Successfully reject');
 
 			}catch(Exception $e){
 	        	 drupal_set_message($e->getMessage(), 'Err');
 			}
+
 
 		}
 

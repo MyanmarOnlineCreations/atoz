@@ -1,41 +1,46 @@
 <?php
 	function myatoz_redemption($parameter1=null,$parameter2=null,$parameter3=null){
+	   global $user;
+  	   if (in_array('super admin', $user->roles)) {
+
 		$output = '';
 		if ($parameter1 == "edit" && $parameter2) {
-	        $contentForm = drupal_get_form ("myatoz_gifts_form", $parameter2);
-	        $output .= drupal_render ($contentForm);
-	    }else if ($parameter1 == "detail" && $parameter2) {
-	        $output .= myatoz_gift_detail_list($parameter2);
-	    }else if($parameter1 == 'new'){
-			$contentForm = drupal_get_form('myatoz_gifts_form');
-			$output .= drupal_render($contentForm);
+	           $contentForm = drupal_get_form ("myatoz_gifts_form", $parameter2);
+	           $output .= drupal_render ($contentForm);
+	    	}else if ($parameter1 == "detail" && $parameter2) {
+	           $output .= myatoz_gift_detail_list($parameter2);
+	    	}else if($parameter1 == 'new'){
+		   $contentForm = drupal_get_form('myatoz_gifts_form');
+		   $output .= drupal_render($contentForm);
 		}else if($parameter1 == 'new_detail'){
-			$contentForm = drupal_get_form('myatoz_giftsdetail_form',$parameter2);
-			$output .= drupal_render($contentForm);
+		   $contentForm = drupal_get_form('myatoz_giftsdetail_form',$parameter2);
+		   $output .= drupal_render($contentForm);
 		}else if($parameter1 == 'edit_detail'){
-			$contentForm = drupal_get_form('myatoz_giftsdetail_form',$parameter2,$parameter3);
-			$output .= drupal_render($contentForm);
+		   $contentForm = drupal_get_form('myatoz_giftsdetail_form',$parameter2,$parameter3);
+		   $output .= drupal_render($contentForm);
 		} else{
-        	$output .= myatoz_gift_list();
-        }
+        		$output .= myatoz_gift_list();
+       		}
 		return $output;
+	    }
 	}
 
 	function myatoz_gift_list()
 	{
 		global $user;
 		$output="";	
-		$offset = 0;
 		$link = $_SERVER["REQUEST_URI"];
 		$rowsPerPage = 100;
 		$dataPerRow = 1;
-    	$data = array();
+		$offset = atoz_admin_page_offset($rowsPerPage);		
+		
+    	 	$data = array();
 
 		$sortOptions = array (
-			"default"	=> "created_date",
-			"gift_name"	=> "",
-			"grid"  	=> "",
-			"gpoint"	=> "",
+			"default"	=> "gift_name",
+			"gift_name"	=> "desc",
+			"grid"  	=> "desc",
+			"gpoint"	=> "desc",
 			
 		);
 
@@ -47,14 +52,19 @@
 		);
 
 		$headerFields = array (
-			"Item Name"      	=> "name",
-	        "Item ID" 			=> "grid",
-	        "Point Value"		=> "gpint",
-	        "Action"			=> ""	
+			t("Item Name" )     	=> "gift_name",
+      t("Item ID") 			=> "grid",
+     t( "Point Value")		=> "gpoint",
+      t("Action")			=> ""	
 		);
 
 		$query = db_select('tbl_home_gift','g');
 		$query -> fields('g');
+		$query -> condition('g.type',1);
+		$query->range($offset, $rowsPerPage);
+
+	  atoz_checksort ($sortOptions, $query);
+
 		$result = $query->execute();
 
 
@@ -72,18 +82,19 @@
 
 		$pageQuery = $query;
 
-		$output .= '<a href="/atoz/redemption/new"> + New Gift</a>';
+		$output .= '<a href="/atoz/redemption/new"> + '.t('New Gift').'</a>';
 
 
 		$pager = atoz_admin_pager_by_query($pageQuery,"g", "grid", $dataPerRow, $rowsPerPage, $currentPage, $offset, $total);
 
-		$output .= '<h2 class="list_header"> Redeemption List <span class="myst-admin-title-total">('.$total.')</span></h2>';
+		$output .= '<h2 class="list_header"> '.t("Redemption List").' <span class="myst-admin-title-total">('.$total.')</span></h2>';
 
 
 		$output .=  $pager . atoz_admin_create_table ("home-admin-table", $header, $data, $styleArray) . $pager;
 
 		return $output;
 	}
+
 	function myatoz_gifts_form($form, &$form_state, $grid=""){
 
 		$form = array('#id' => 'atoz_gift_form');
@@ -108,7 +119,7 @@
 	    }
 
 		$form['title'] = array (
-	      	'#markup' => 'Gift Item Info',
+	      	'#markup' => t('Gift Item Info'),
 	    );		
 
 		$form['gift_name'] = array (
@@ -153,7 +164,7 @@
 
 		global $user;
 
-		$now = date('Y-m-d G:i:s');
+		$now = date('Y-m-d h:i:s');
 
 		$data = $form_state["values"];
 
@@ -202,10 +213,10 @@
 	    	$gpoint     = $row->gpoint;
 	    	$grid    = $grid;
 	    }
-	    $output = '<h2 class="list_header">Gift Details</h2>';
-	    $output .= "<p>Item Name : ".$gift_name."</p>";
-	    $output .= "<p>Item ID : ".$grid."</p>";
-	    $output .= "<p>Point Value : ".$gpoint."</p>";
+	    $output = '<h2 class="list_header">'.t('Gift Details').'</h2>';
+	    $output .= "<p>".t('Item Name')." : ".$gift_name."</p>";
+	    $output .= "<p>".t('Item ID')." : ".$grid."</p>";
+	    $output .= "<p>".t('Point Value')." : ".$gpoint."</p>";
 
 		$offset = 0;
 		$link = $_SERVER["REQUEST_URI"];
@@ -229,10 +240,10 @@
 		);
 
 		$headerFields = array (
-			"Stocks"      	=> "qty",
-	        "City" 			=> "",
-	        "Outlet"		=> "",
-	        "Action"			=> ""	
+			t("Stocks")      	=> "qty",
+	        t("City") 			=> "",
+	        t("Outlet")		=> "",
+	        t("Action")			=> ""	
 		);
 
 		$query = db_select('tbl_home_gift_detail','gd');
@@ -256,12 +267,12 @@
 
 		$pageQuery = $query;
 
-		$output .= '<a href="/atoz/redemption/new_detail/'.$grid.'"> + New Gift Detail</a>';
+		$output .= '<a href="/atoz/redemption/new_detail/'.$grid.'"> +'. t("New Gift Detail").'</a>';
 
 
 		$pager = atoz_admin_pager_by_query($pageQuery,"gd", "gdid", $dataPerRow, $rowsPerPage, $currentPage, $offset, $total);
 
-		$output .= '<h2 class="list_header"> Detail List <span class="myst-admin-title-total">('.$total.')</span></h2>';
+		$output .= '<h2 class="list_header"> '. t("Detail List").' <span class="myst-admin-title-total">('.$total.')</span></h2>';
 
 
 		$output .=  $pager . atoz_admin_create_table ("home-admin-table", $header, $data, $styleArray) . $pager;
@@ -297,7 +308,7 @@
 	    }
 
 		$form['title'] = array (
-	      	'#markup' => 'Gift Detail Info',
+	      	'#markup' => t('Gift Detail Info'),
 	    );		
 
 		$form['stock'] = array (

@@ -17,36 +17,42 @@
 		global $user;
 
 		$output="";	
-		$offset = 0;
 		$link = $_SERVER["REQUEST_URI"];
 		$rowsPerPage = 100;
 		$dataPerRow = 1;
+		$offset = atoz_admin_page_offset($rowsPerPage);		
+		
     	$data = array();
 
 		$sortOptions = array (
-			"default"			=> "created_date",
-			"name"				=> "",
-			"created_date"  	=> "desc",
-			"township"			=> "",
-			"city"				=> "",
-			
+			"default"			=> "name",
+			"name"				=> "desc",
+			"member_level"		=> "desc",	
+			"created_date"      => "desc"		
 		);
 
 		$styleArray = array (
 			"",
 			"",
 			"",	
+			"",	
 		);
 
 		$headerFields = array (
-			"Name"      	   => "name",
-	        "Membership Level" => "member_level",
-	        "Action"		   => ""
+			t("Name")      	   => "name",
+	        t("Membership Level") => "member_level",
+	        t("Creation Date") => "created_date",
+	        t("Action")		   => ""
 		);
 
 		$query = db_select('tbl_home_members_info','m');
 		$query -> fields('m');
 		$query -> condition("m.status","1001","!=");
+
+		$query->range($offset, $rowsPerPage);
+
+	    atoz_checksort ($sortOptions, $query);
+	    
 		$result = $query->execute();
 
 		$status_arr = atoz_member_status();
@@ -58,9 +64,16 @@
 		if($result){
 
 			foreach($result as $row){
+
+				if($row->member_level == ''){
+					$member_level = '';
+				}else{
+					$member_level = $member_level_arr[$row->member_level];
+				}
 				
 				$list['name'] = $row->name;
-				$list['member_level'] = $member_type_arr[$row->member_type] . ' / ' . $member_level_arr[$row->member_level];				
+				$list['member_level'] = $member_type_arr[$row->member_type] . ' / ' . $member_level;	
+				$list['created_date'] = date('Y-m-d',strtotime($row->created_date));			
 				$list['action'] = '<a href="/atoz/pending/view/'.$row->gmid.'">View</a>';
 
 				$data[] = $list;				
@@ -68,15 +81,13 @@
 			
 		}
 
-
 		$header = atoz_generateHeader ($headerFields, $sortOptions);
 
 		$pageQuery = $query;
 
 		$pager = atoz_admin_pager_by_query($pageQuery,"m", "gmid", $dataPerRow, $rowsPerPage, $currentPage, $offset, $total);
 
-		$output .= '<h2 class="list_header"> Pending <span class="myst-admin-title-total">('.$total.')</span></h2>';
-
+		$output .= '<h2 class="list_header"> '.t('Pending').' <span class="myst-admin-title-total">('.$total.')</span></h2>';
 
 		$output .=  $pager . atoz_admin_create_table ("home-admin-table", $header, $data, $styleArray) . $pager;
 
@@ -179,6 +190,7 @@
 	        '#type' => 'select',
 	        '#options' => $member_level_arr,
 	        '#default_value' => $data["member_level"],
+	        '#required' => true,
 	    );	    
 
 	    $form['gmid'] = array(
@@ -189,12 +201,12 @@
 
 	    $form['save'] = array(
 		    '#type' => 'submit',
-		    '#value' => 'Approve',
+		    '#value' => t('Approve'),
 		);
 
 		$form['reject'] = array(
 		    '#type' => 'submit',
-		    '#value' => 'Reject',
+		    '#value' => t('Reject'),
 		);
 
 		return $form;
@@ -209,13 +221,13 @@
 
 		global $user;
 
-		$now = date('Y-m-d G:i:s');
+		$now = date('Y-m-d h:i:s');
 
 		$data = $form_state['values'];
 
 		$fields = array();
 
-		if($form_state['values']['op'] == 'Approve'){
+		if($form_state['values']['op'] == t('Approve')){
 
 			$fields['current_point'] = $data['current_point'];
 			$fields['member_level'] = $data['member_level'];
@@ -238,7 +250,7 @@
 			}catch(Exception $e){
 	        	 drupal_set_message($e->getMessage(), 'Err');
 			}
-		}else if($form_state['values']['op'] == 'Reject'){
+		}else if($form_state['values']['op'] == t('Reject')){
 
 			$fields['status'] = '1002'; //reject
 			$fields['member_level'] = $data['member_level'];

@@ -1,9 +1,12 @@
 <?php
+date_default_timezone_set("Asia/Yangon");
 function atoz_admin_init () {
      $server = $_SERVER["SERVER_NAME"];
 
 	  drupal_add_css(drupal_get_path('module', 'atoz') . '/css/atoz_admin.css', array("group"=> CSS_THEME));
 	  drupal_add_js(drupal_get_path('module', 'atoz') . '/js/atoz_admin.js');
+	  drupal_add_js('https://ajax.googleapis.com/ajax/libs/myanmar-tools/1.2.1/zawgyi_detector.min.js');
+	  drupal_add_js('https://ajax.googleapis.com/ajax/libs/myanmar-tools/1.2.1/zawgyi_converter.min.js');
 }
 
 function atoz_navbar ($parameter1) {
@@ -17,24 +20,38 @@ function atoz_navbar ($parameter1) {
 	    $buttons["account_verification"] =  array ("url"=>"/atoz/account_verification", "label"=>t('Account Verification'));
 	    $buttons["member"] =  array ("url"=>"/atoz/member", "label"=>t('Member'));
 	    $buttons["redemption"] =  array ("url"=>"/atoz/redemption", "label"=>t('Redemption List'));
-	    $buttons["report"] =  array ("url"=>"/atoz/report", "label"=>t('Reports'));
+	    $buttons["memberreport"] =  array ("url"=>"/atoz/memberreport", "label"=>t('Member Report'));
+	    $buttons["pointreport"] =  array ("url"=>"/atoz/pointreport", "label"=>t('Point Management Report'));
+	    $buttons["redemptionreport"] =  array ("url"=>"/atoz/redemptionreport", "label"=>t('Redemption Report'));
+	    $buttons["redemption_history"] =  array ("url"=>"/atoz/redemption_history", "label"=>t('Redemption History'));	    
 	    $buttons["memberlayer_rules"] =  array ("url"=>"/atoz/memberlayer_rules", "label"=>t('Rules'));
 	    $buttons["pending"] =  array ("url"=>"/atoz/pending", "label"=>t('Pending'));
 	    $buttons["staff"] =  array ("url"=>"/atoz/staff", "label"=>t('Staff'));
 	    $buttons["promotions"] =  array ("url"=>"/atoz/promotions", "label"=>t('Promotions'));
   	    $buttons["outlet"] =  array ("url"=>"/atoz/outlet", "label"=>t('Outlets'));
 	    $buttons["birthday"] =  array ("url"=>"/atoz/birthday", "label"=>t('Birthday'));
-
   	    
     }else if(in_array('atoz admin', $user->roles)){
 		
     }else if(in_array('staff admin',$user->roles)){
-	    $buttons["member"] =  array ("url"=>"/atoz/member", "label"=>t('Member'));    	
     	$buttons["account_verification"] =  array ("url"=>"/atoz/account_verification", "label"=>t('Account Verification'));
+	    $buttons["member"] =  array ("url"=>"/atoz/member", "label"=>t('Member'));    	
+    	$buttons["memberreport"] =  array ("url"=>"/atoz/memberreport", "label"=>t('Member Report'));
+	    $buttons["pointreport"] =  array ("url"=>"/atoz/pointreport", "label"=>t('Point Management Report'));
+	    $buttons["redemptionreport"] =  array ("url"=>"/atoz/redemptionreport", "label"=>t('Redemption Report'));
 	    $buttons["redemption_history"] =  array ("url"=>"/atoz/redemption_history", "label"=>t('Redemption History'));
 	    $buttons["pending"] =  array ("url"=>"/atoz/pending", "label"=>t('Pending'));
-	    $buttons["birthday"] =  array ("url"=>"/atoz/birthday", "label"=>t('Birthday'));
+	    $buttons["staff"] =  array ("url"=>"/atoz/staff", "label"=>t('Staff'));
+	    $buttons["promotions"] =  array ("url"=>"/atoz/promotions", "label"=>t('Promotions'));
+  	    $buttons["outlet"] =  array ("url"=>"/atoz/outlet", "label"=>t('Outlets'));	    
+	    $buttons["birthday"] =  array ("url"=>"/atoz/birthday", "label"=>t('Birthday'));	    
+    }else if(in_array('branch', $user->roles)){
+    	$buttons["account_verification"] =  array ("url"=>"/atoz/account_verification", "label"=>t('Account Verification'));
+	    $buttons["member"] =  array ("url"=>"/atoz/member", "label"=>t('Member')); 
+	    $buttons["pending"] =  array ("url"=>"/atoz/pending", "label"=>t('Pending'));
 	    
+	    $buttons["birthday"] =  array ("url"=>"/atoz/birthday", "label"=>t('Birthday'));	    
+
     }
 	$output = '
 	<div id="primary_tabs" class="tabs ">
@@ -63,7 +80,19 @@ function atoz_navbar ($parameter1) {
 
 function atoz ($parameter1, $parameter2, $parameter3, $parameter4) {
 
-    $output = '<a href="/user/logout"><div class="admin-option" style="float: right">' . t('Logout') . "</div></a>";
+    // $output = '<a href="/user/logout"><div class="admin-option" style="float: right">' . t('Logout') . "</div></a>";
+
+    $currentURL = request_uri();
+
+    $split_arr = split('?', $currentURL);
+
+    $url = $split_arr[0];
+
+
+
+    // $output = '<a href="/user/logout"><div class="admin-option" style="float: right">' . t('Logout') . "</div></a>";
+
+    $output = '<div class="admin-option" style="float: right"><a href="'.$url.'?language=en"> EN | </a> <a href="'.$url.'?language=my"> ျမန္မာ</a><br><a href="/user/logout">' . t('Logout') . '</a> </div>';
 
 	$output .= atoz_navbar ($parameter1);
 
@@ -351,16 +380,25 @@ function atoz_admin_birthday ($parameter1 = null, $parameter2 = null, $parameter
      return myatoz_birthday ($parameter1, $parameter2, $parameter3, $parameter4, $parameter5);
 }
 
+function atoz_admin_memberreport($parameter1 = null ,$parameter2 = null,  $parameter3 = null, $parameter4 = null, $parameter5 = null){
 
+	require_once ("atoz_admin_member_report.inc");
 
+    return myatoz_member_report ($parameter1, $parameter2, $parameter3, $parameter4, $parameter5);
+}
 
-
-
-function atoz_admin_report ($parameter1 = null, $parameter2 = null, $parameter3 = null, $parameter4 = null, $parameter5 = null) {
+function atoz_admin_pointreport ($parameter1 = null, $parameter2 = null, $parameter3 = null, $parameter4 = null, $parameter5 = null) {
     // echo "12345";
-     require_once ("atoz_admin_report.inc");
+    require_once ("atoz_admin_point_report.inc");
 
-     return myatoz_report ($parameter1, $parameter2, $parameter3, $parameter4, $parameter5);
+    return myatoz_point_report ($parameter1, $parameter2, $parameter3, $parameter4, $parameter5);
+}
+
+function atoz_admin_redemptionreport ($parameter1 = null, $parameter2 = null, $parameter3 = null, $parameter4 = null, $parameter5 = null) {
+    // echo "12345";
+    require_once ("atoz_admin_redemption_report.inc");
+
+    return myatoz_redemption_report ($parameter1, $parameter2, $parameter3, $parameter4, $parameter5);
 }
 
 function atoz_admin_outlet($parameter1 = null, $parameter2 = null){
@@ -666,4 +704,17 @@ function atoz_checksort ($sortOptions, &$query) {
 		$query->orderby ($sortBy, $order);
 	}
 }
+
+function atoz_admin_page_offset ($rowsPerPage) {
+    $currentPage = 1;
+
+    if (isset ($_GET["page"])) {
+        $currentPage = $_GET["page"];
+    }
+
+    $offset = ($currentPage - 1) * $rowsPerPage;
+
+    return $offset;
+}
+
 

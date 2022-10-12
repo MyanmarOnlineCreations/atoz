@@ -71,9 +71,8 @@ function atoz_temp_path() {
     return variable_get('file_default_scheme', 'public') . '://temp/';
 }
 
-function atoz_file_path() {
-    //return variable_get('file_default_scheme', 'public') . '://social/images/';
-    return variable_get('file_default_scheme', 'public') . '://'.$type.'/';
+function atoz_file_path($type) {
+    return variable_get('file_default_scheme', 'public') . '://atoz/'.$type.'/';
 }
 
 function atoz_profile_path() {
@@ -96,7 +95,7 @@ function atoz_web_path ($type = "images") {
     else {
         // S3 CODE
         require_once ("atoz_cloud.inc");
-        $mycloud = new ATOZCloud();
+        $mycloud = new MyatozCloud();
         $path = $mycloud->file_url('/atoz/'.$type.'/');
     }
     return $path;
@@ -106,65 +105,20 @@ function atoz_web_path ($type = "images") {
 function atoz_web_profile_path () {
     $path = "";
 
-    if (ATOZ_LOCAL_FILESTORAGE) {
+    //if (ATOZ_LOCAL_FILESTORAGE) {
        $path =  '/sites/default/files/social/profiles/';
-    }
+    /*}
     else {
         // S3 CODE
         require_once ("atoz_cloud.inc");
-        $mycloud = new ATOZCloud();
+        $mycloud = new MyatozCloud();
         $path = $mycloud->file_url('/social/profiles/');
-    }
+    }*/
     return $path;
 
 }
 
 
-//  newly added for category folder page
-function atoz_category_image_path () {
-    $path = "";
-
-    if (ATOZ_LOCAL_FILESTORAGE) {
-       $path =  '/sites/default/files/social/category/';
-    }
-    else {
-
-        require_once ("atoz_cloud.inc");
-        $mycloud = new ATOZCloud();
-        $path = $mycloud->file_url('/social/category/');
-    }
-    return $path;
-
-}
-
-//  newly added for application folder page
-function atoz_application_path () {
-    $path = "";
-
-    if (ATOZ_LOCAL_FILESTORAGE) {
-       $path =  '/sites/default/files/social/application/';
-    }
-    else {
-        require_once ("atoz_cloud.inc");
-        $mycloud = new ATOZCloud();
-        $path = $mycloud->file_url('/social/application/');
-    }
-    return $path;
-
-}
-
-// newly added for atoz_img folder page
-function atoz_atozimage_path () {
-    $path = "";
-    if(ATOZ_LOCAL_FILESTORAGE)
-    {
-       $path = '/sites/default/files/social/atoz_img/';
-    }else{
-       require_once ("atoz_cloud.inc");
-       $mycloud = new ATOZCloud();
-       $path = $mycloud->file_url('/social/atoz_img/');
-    }
-}
 
 function atoz_save_profile_picture ($picture_url) {
     $file = new stdClass ();
@@ -233,11 +187,11 @@ function atoz_save_local_file ($fileSource, $filename, $action = FILE_EXISTS_REP
     //print_r($path ."<br/>");
     $path = atoz_get_path ($type);
     $destination = $path . $filename;
-    //print_r($destination . "<br/>");
+   // print_r($destination . "<br/>");
 
     $finalDestination = file_unmanaged_move($fileSource, $destination, $action);
 
-   // print_r($finalDestination . '<br/>');
+    //print_r($finalDestination . '<br/>');
 
     return $finalDestination;
 }
@@ -334,7 +288,7 @@ function atoz_save_cloud_file ($fileSource, $filename, $action = FILE_EXISTS_REN
     $path = atoz_get_path ($type);
 
     require_once ("atoz_cloud.inc");
-    $mycloud = new ATOZCloud();
+    $mycloud = new MyatozCloud();
 
     $path = atoz_file_default_scheme_for_cloud($path);
     $destination = $path . $filename;
@@ -372,7 +326,7 @@ function atoz_delete_cloud_file ($filename, $type = "file") {
     $path = atoz_get_path ($type);
 
     require_once ("atoz_cloud.inc");
-    $mycloud = new ATOZCloud();
+    $mycloud = new MyatozCloud();
 
     $path = atoz_file_default_scheme_for_cloud($path);
     $destination = $path . $filename;
@@ -593,6 +547,14 @@ function atoz_get_unique_profile_id ($prefix = 'U') {
             $query = db_select ("tbl_home_rules", "r")
                 ->condition("ruleId", $uniqueID)
                 ->fields ("r", array("ruleId"))
+                ->range (0, 1);
+        }else if ($prefix == "N") {
+
+            $uniqueID = uniqid ("N", true);
+
+            $query = db_select ("tbl_home_notifications", "n")
+                ->condition("notification_id", $uniqueID)
+                ->fields ("n", array("notification_id"))
                 ->range (0, 1);
         }else{
 
@@ -1101,6 +1063,8 @@ function atoz_division(){
         $data[$row->cid]    = $row->city_name;
     }
 
+    $data[''] = t('-- Select --');
+
     return $data;
 }
 
@@ -1134,7 +1098,7 @@ function atoz_get_outlet ($city = null) {
     foreach ($result as $row) {
         $data[$row->goid]    = $row->name;
     }
-
+    $data[''] = t('-- Select --');
     return $data;
 }
 
@@ -1144,7 +1108,13 @@ function atoz_consumer_type () {
         "2002" => "Non-Domestic consumption",
     );
 }
-
+function atoz_ads_type()
+{
+    return array (
+        "9001" => "Slider",
+        "9002" => "Display Ads",
+    );
+}
 function atoz_consumer_sub_type ($consumerType=null) {
     if($consumerType=="2002"){
         return array (
@@ -1180,14 +1150,15 @@ function atoz_member_status () {
 
 function atoz_member_types(){
     return array(
+        ""  => t('-- Select --'),
         "2000" => "Retail",
-        "2001" => "Whole Sale",
+        "2001" => "Wholesale",
     );
 }
 
 function atoz_member_level(){
     return array(
-        "" => "--Select--",
+        ""  => t('-- Select --'),
         "4000" => "Silver",
         "4001" => "Gold",
         "4002" => "Platinum",
@@ -1214,10 +1185,11 @@ function atoz_get_member_by_id($member_id){
     $data['uid'] = '';
     $data['spent_amount'] = 0;
     $data['point'] = 0;
+    $data['gender'] = '';
 
     $query = db_select('tbl_home_members_info','m');
     $query ->leftjoin('tbl_home_rules','r','m.member_level = r.member_level');
-    $query -> fields('m',array('name','dob','nrc','phone','current_point','member_type','city','township','address','status','member_level','uid'));
+    $query -> fields('m',array('name','dob','nrc','phone','current_point','member_type','city','township','address','status','member_level','uid','gender'));
     $query ->fields('r',array('spent_amount','point'));
     $query -> condition('m.gmid',$member_id);
     $result = $query->execute()->fetchObject();
@@ -1238,7 +1210,7 @@ function atoz_get_user_by_id($uid){
     $data['name'] = '';
     $data['email'] = '';
     $data['phone'] = '';
-    $data['department'] = '';
+    // $data['department'] = '';
     $data['outlet'] = '';
     $data['city'] = '';
     $data['township'] = '';
@@ -1249,7 +1221,7 @@ function atoz_get_user_by_id($uid){
 
     $query = db_select('tbl_home_users_info','u');
     $query ->join('users_roles','r','u.uid = r.uid');
-    $query -> fields('u',array('name','email','phone','department','outlet','city','township','remark','status','guid'));
+    $query -> fields('u',array('name','email','phone','outlet','city','township','remark','status','guid'));
     $query -> fields('r',array('rid'));
     $query -> condition('u.uid',$uid);
     $result = $query->execute()->fetchObject();
@@ -1674,7 +1646,7 @@ function atoz_get_role(){
     $dbOr = db_or();
 
     $dbOr->condition('r.name','staff admin');
-    $dbOr->condition('r.name','super admin');
+    $dbOr->condition('r.name','branch');
 
     $query ->condition($dbOr);
 
@@ -1697,7 +1669,7 @@ function myatoz_gifts_by_id($gmid){
 
     $data = array(''=>'Select Gift'); 
 
-    $query = "select g.grid,g.gift_name,g.gpoint,d.qty from tbl_home_gift g join tbl_home_gift_detail d on g.grid = d.grid where d.qty > 0 and d.qty is not null and d.cid = (select city from tbl_home_users_info where uid = '".$user->uid."') and gpoint <= (select current_point from tbl_home_members_info where gmid = '".$gmid."')";
+    $query = "select g.grid,g.gift_name,g.gpoint,d.qty from tbl_home_gift g join tbl_home_gift_detail d on g.grid = d.grid where  ( d.qty > 0 and d.qty is not null and d.cid = (select city from tbl_home_users_info where uid = '".$user->uid."') and gpoint <= (select current_point from tbl_home_members_info where gmid = '".$gmid."')) or type='2'";
    
     $result = db_query($query);
 
@@ -1731,4 +1703,217 @@ function atoz_get_rule($ruleId){
     }
 
     return $data;
+}
+
+
+function atoz_get_promo_lists($promo_id = ''){
+    $data = array();
+    $query = db_select('tbl_home_promotion','p');
+    $query -> fields('p', array(
+        'promo_id',
+        'name',
+	'namemm',
+        'description',
+        'descriptionmm',
+        'ads_type',
+        'image_en',
+        'image_mm',
+        'created_date',
+        'modified_date',
+    ));
+    if($promo_id != ''){
+        $query->condition('p.promo_id',$promo_id);
+    }
+    //echo $query;exit();
+    $data = $query->execute()->fetchAll();
+
+    return $data;
+}
+
+function atoz_get_unique_member_id($member_type){
+
+    //7 digit id
+
+    $prefix = '';
+
+    $gmid = "";
+
+    $string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+    if($member_type == "2000" ){
+        $prefix = "RT";
+    }else if($member_type == "2001"){
+        $prefix = "WS";
+    }
+
+    $randomNumber = rand( 100000 , 999999);
+
+    $randomChar = randomChars($string, 1);
+
+    $gmid = $prefix .'-'.$randomNumber.$randomChar;    
+
+    return $gmid;
+}
+
+function randomChars($str, $numChars){
+    //Return the characters.
+    return substr(str_shuffle($str), 0, $numChars);
+}
+
+function myst_clean_for_csv ($input) {
+    if ($input) {
+        $input = str_replace ("\n", ",", $input);
+
+        return '"' . str_replace ('"', '\"', $input) . '"';
+    }
+    else {
+        return $input;
+    }
+
+}
+
+function get_atoz_created_by_users(){
+
+    $data = array();
+
+    $data[''] = '';
+
+    $query = db_select('tbl_home_users_info','i');
+    $query -> join('users','u','i.uid = u.uid');
+    $query -> fields('u',array('uid','name'));
+
+    $result = $query->execute();
+
+    foreach($result as $row){
+       $data[$row->uid] = $row->name;
+    }
+
+    // $query = db_select('tbl_home_members_info','i');
+    // $query -> join('users','u','i.uid = u.uid');
+    // $query -> fields('u',array('uid','name'));
+
+    // $result = $query->execute();
+
+    // foreach($result as $row){
+    //    $data[$row->uid] = $row->name;
+    // }
+
+    return $data;
+}
+
+function atoz_gender(){
+    return array('M' => 'Male', 'F' => 'Female');
+}
+
+function send_sms_brix($phone,$message){
+
+    $authID = 'SB12510518965458117423836966132112';
+    $authCode = 'v2m3gSCHsSq27IGiw6IZ7LzpDyKEa9B!#OiUgPHbK7vm';
+    $url = 'https://api.smsbrix.com/v1/message/send';
+
+    $post_data['senderid'] = 'ATOZ';
+    $post_data['number'] = $phone;
+    $post_data['message'] = $message;
+
+    watchdog(
+        'atoz Brix SMS Request',
+        'atoz Brix SMS Request phone= @phone,message = @message',
+        array('@phone'=> $phone,'@message'=>$message),
+        WATCHDOG_NOTICE
+    );
+
+    foreach ( $post_data as $key => $value) {
+        $post_items[] = $key . '=' . $value;
+    }
+
+    $post_string = implode ('&', $post_items);
+
+    $headers = array();
+    $Auth = $authID .':'. $authCode;
+    $headers[] = "Authorization: Basic " . base64_encode($Auth);
+    $headers['Access-Control-Allow-Methods'] = 'POST';
+   
+    $curl_connection = curl_init($url);
+    curl_setopt($curl_connection, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($curl_connection, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($curl_connection, CURLOPT_POSTFIELDS, $post_string);        
+    curl_setopt($curl_connection, CURLOPT_HTTPHEADER, $headers);
+
+    $send_result = curl_exec($curl_connection);
+
+    curl_close($curl_connection);
+
+    watchdog(
+        'atoz Brix SMS Response',
+        'atoz Brix SMS Response @response',
+        array('@response' => $send_result),
+        WATCHDOG_NOTICE
+    );
+
+    $send_result = json_decode($send_result);
+
+    $status = $send_result->status;
+
+    $res = array();
+
+   if($status == success){
+
+        $url='https://api.smsbrix.com/v1/message/info/'.$messageId;
+
+        $headers= array();
+        $Auth = $authID .':'. $authCode;
+        $headers[] = "Authorization: Basic " . base64_encode($Auth);
+
+        $crl = curl_init();
+        curl_setopt($crl, CURLOPT_URL, $url);
+        curl_setopt($crl, CURLOPT_HTTPHEADER,$headers);
+        curl_setopt($crl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($crl, CURLOPT_HTTPGET,true);
+
+        sleep(5);
+        $res = curl_exec($crl);
+
+        if (curl_errno($crl)) {
+            echo 'Error:' . curl_error($crl);
+        }
+        curl_close($crl);
+
+        $res = json_decode($res);
+
+    }else if($status->code=="400"){
+        $res='{
+              "status": "Insufficient Balance"
+         }';
+        $res = json_decode($res);
+    }else{
+        $res='{
+              "status": "Failed"
+         }';
+        $res = json_decode($res);
+    }
+    return $res;
+}
+
+function atoz_get_outlet_by_id($goid){
+
+    $data = array();
+
+    $data['name'] = '';
+    $data['city'] = '';
+    $data['township'] = '';
+
+    $query = db_select('tbl_home_outlets','o');
+    $query -> condition('goid',$goid);
+    $query -> fields('o',array('name','city','township'));
+    $result = $query ->execute()->fetchObject();
+
+    if($result){
+        foreach($result as $key=>$value){
+            $data[$key] = $value;
+        }
+
+    }
+
+    return $data;
+
 }

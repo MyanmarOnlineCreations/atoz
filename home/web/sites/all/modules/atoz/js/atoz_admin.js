@@ -1,3 +1,4 @@
+
 jQuery(document).ready(function() {
     // jQuery("#uploader").plupload({
     //     // General settings
@@ -74,13 +75,23 @@ jQuery(document).ready(function() {
 
     jQuery("#my-atoz-redeem-edit #edit-gift").change(function () {
         checkGift();
-    })
+    });
 
     jQuery("#my-atoz-point-collect-edit #edit-total-amount").keyup(function () {
         calculatePoint();
-    })
+    });
 
-    
+    jQuery("#my-atoz-staff-edit #edit-name").keypress(function ( event ) {  
+       var key = event.keyCode;
+        if (key === 32) {
+          event.preventDefault();
+        }
+    });
+
+    jQuery("#edit-title").keypress(function () {
+        var title = jQuery("#edit-title").val();
+        convertUniCode(title);
+    });    
  
     checkDivision ();
     checkFilterDivision ();
@@ -172,6 +183,31 @@ function upload_completed (up,files) {
 	});
 
 }
+function upload_completedmm (up,files) {
+    imageWidth = jQuery(window).width();
+
+    jQuery.each(files, function () {
+        var img = new mOxie.Image();
+        img.onload = function () {
+            jQuery('#pick-imagemm').empty();
+            this.embed(jQuery('#pick-imagemm').get(0), {
+                width: imageWidth,
+                height: 100
+            });
+            jQuery('#pick-imagemm').addClass("loaded");
+
+            jQuery(".plupload_filelist_footer").hide ();
+        };
+        img.onembedded = function () {
+            this.destroy();
+        };
+        img.onerror = function () {
+            this.destroy();
+        };
+        img.load(this.getSource());
+    });
+
+}
 
 function upload_file (up,files) {
     jQuery(".plupload_filelist_footer").show ();
@@ -233,10 +269,33 @@ function calculatePoint(){
 
     var spent_amount = jQuery('#my-atoz-point-collect-edit #edit-spent-amount').val();
 
-    var point = ( total / spent_amount ) * get_point;
+    var point = parseInt(( total / spent_amount ) * get_point);
 
     jQuery('#my-atoz-point-collect-edit #edit-point').val(point);
 }
+
+
+function convertUniCode(title=''){
+
+    const detector = new google_myanmar_tools.ZawgyiDetector();
+
+    const score = detector.getZawgyiProbability(title);
+
+    // var output = '';
+
+    // if(score > 0 ){
+    //     const converter = new google_myanmar_tools.ZawgyiConverter();
+    //     output = converter.zawgyiToUnicode(title);
+    // }else{
+    //     output = 'it is uni';
+    // }
+
+    // console.log(output);
+
+    console.log(score);
+
+}
+
 
 
 

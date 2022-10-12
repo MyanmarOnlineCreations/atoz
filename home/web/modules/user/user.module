@@ -1658,7 +1658,7 @@ function user_menu() {
     'type' => MENU_DEFAULT_LOCAL_TASK,
   );
 
- /* $items['user/register'] = array(
+  /*$items['user/register'] = array(
     'title' => 'Create new account',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('user_register_form'),

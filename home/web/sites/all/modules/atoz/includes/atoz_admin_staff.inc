@@ -22,50 +22,62 @@
 	function myatoz_staff_list(){
 		global $user;
 		$output="";	
-		$offset = 0;
 		$link = $_SERVER["REQUEST_URI"];
 		$rowsPerPage = 100;
 		$dataPerRow = 1;
+		$offset = atoz_admin_page_offset($rowsPerPage);		
+		
     	$data = array();
 
 		$sortOptions = array (
-			"created_date"		=> "created_date",
-			"name"				=> "",
-			"created_date"  	=> "desc",
-			"department"		=> "",
+			"name"				=> "name",
+			// "department"		=> "desc",
+			"name"				=> "desc",	
+			"rl.name"			=> "desc",	
+			"outlet"			=> "desc",	
+			"remark"			=> "",
 			
 		);
 
-		$styleArray = array (
-			"",
+		$styleArray = array (			
 			"",
 			"",
 			"",	
+			""
 		);
 
 		$headerFields = array (
-			"Name"      	=> "name",
-	        "Department" 	=> "department",
-	        "Role"			=> "role",
-	        "Remark"		=> "remark"	,
-	        "Action"		=> "",
+			t("Name")      		=> "name",
+	        // t("Department") 	=> "department",
+	        t("Role")			=> "rl.name",
+	        t("Outlet")			=> "outlet",
+	        t("Remark")			=> "remark"	,
+	        t("Action")			=> "",
 		);
 
 		$query = db_select('tbl_home_users_info','u');
 		$query ->join('users_roles','r','r.uid = u.uid');
-		$query ->join('role','role','r.rid = role.rid');
+		$query ->join('role','rl','r.rid = rl.rid');
 		$query -> fields('u');
-		$query ->addField('role','name','role_name');
+		$query -> addField('rl','name','role_name');
+
+		$query->range($offset, $rowsPerPage);
+
+	    atoz_checksort ($sortOptions, $query);
+
 		$result = $query->execute();
 
-		$dep_arr = atoz_department();
+		// $dep_arr = atoz_department();
+
+		$outlet_arr = atoz_get_outlet();
 
 		if($result){
 			
 			foreach($result as $row){				
 				$list['name'] = $row->name;
-				$list['department'] = $dep_arr[$row->department];
-				$list['role'] = $row->role_name;
+				// $list['department'] = $dep_arr[$row->department];
+				$list['role_name'] = $row->role_name;
+				$list['outlet']	= $outlet_arr[$row->outlet];
 				$list['remark'] = $row->remark;
 				$list['action'] = '<a href="/atoz/staff/edit/'.$row->uid.'">Edit</a>';
 				$data[] = $list;				
@@ -76,12 +88,12 @@
 
 		$pageQuery = $query;
 
-		$output .= '<a href="/atoz/staff/new"> + New Staff</a>';
+		$output .= '<a href="/atoz/staff/new"> + '.  t('New Staff').'</a>';
 
 
 		$pager = atoz_admin_pager_by_query($pageQuery,"u", "guid", $dataPerRow, $rowsPerPage, $currentPage, $offset, $total);
 
-		$output .= '<h2 class="list_header"> Staffs <span class="myst-admin-title-total">('.$total.')</span></h2>';
+		$output .= '<h2 class="list_header"> '.t('Staff').' <span class="myst-admin-title-total">('.$total.')</span></h2>';
 
 
 		$output .=  $pager . atoz_admin_create_table ("home-admin-table", $header, $data, $styleArray) . $pager;
@@ -96,11 +108,11 @@
 		$data = atoz_get_user_by_id($uid);
 
 		if($uid == ''){
-			$form_title = 'New Staff';
-			$submit_title = 'Create';
+			$form_title = t('New Staff');
+			$submit_title = t('Create');
 		}else{
-			$form_title = 'Edit Staff';
-			$submit_title = 'Update';
+			$form_title = t('Edit Staff');
+			$submit_title = t('Update');
 		}
 
 		$form = array('#id' => 'my-atoz-staff-edit');
@@ -138,16 +150,6 @@
 	        '#options'=>$role_arr,
 	        '#required' => true,	        
 	        '#default_value' => $data["rid"],
-	    );
-
-	    $dep_arr = atoz_department();
-
-	    $form['department'] = array (
-		    '#title' => t('Department'),
-	        '#type' => 'select',
-	        '#options'=>$dep_arr,
-	        '#required' => true,	        
-	        '#default_value' => $data["department"],
 	    );
 
 	    $outlet_arr = atoz_get_outlet();
@@ -246,10 +248,6 @@
 
 			form_set_error('confirm_password', t('Password does not match'));
 		}
-	        if (strrpos($form_state['values']['name'], ' ') === true){
-   			 form_set_error('name', t('Not allow space in name'));
-
-		}
 
 	}
 
@@ -286,6 +284,7 @@
 
 		    $uid = $account->uid;
 
+
 		    if ($uid) {
 		    	
 ;		        // creating staff account
@@ -294,7 +293,12 @@
 		        $details2["mail"] = $email;
 		        $details2["name"] = $username;
 
-		        $account = user_save($account,$details2);
+		        try{
+		        	$account = user_save($account,$details2);
+		        }catch (Exception $e){
+		        	print_r($e->getMessage());
+		        }  		
+
 
 		       db_merge('users_roles')
 	            ->key(array("uid"=>$uid))
@@ -328,8 +332,7 @@
 		$fields['guid'] = $guid;
 		$fields['name'] = $data['name'];
 		$fields['email'] = $data['email'];
-		$fields['phone'] = $data['phone'];
-		$fields['department'] = $data['department'];
+		$fields['phone'] = $data['phone'];		
 		$fields['city'] = $data['city'];
 		$fields['township'] = $data['township'.$data['city']];
 		$fields['outlet'] = $data['outlet'];

@@ -14,10 +14,11 @@
 		global $user;
 
 		$output="";	
-		$offset = 0;
 		$link = $_SERVER["REQUEST_URI"];
 		$rowsPerPage = 100;
 		$dataPerRow = 1;
+		$offset = atoz_admin_page_offset($rowsPerPage);		
+		
     	$data = array();
 
 		$sortOptions = array (
@@ -40,11 +41,11 @@
 		);
 
 		$headerFields = array (
-			"Date" 			=> 'created_date',
-			"Member ID" 	=> "gmid",	
-			"Name" 			=> "name",	        
-	        "Gift Name"		=> "gift_name",
-	        "Gift Point"	=> "gpoint",
+			t("Date") 			=> 'created_date',
+			t("Member ID") 	=> "gmid",	
+			t("Name") 			=> "name",	        
+	        t("Gift Name")		=> "gift_name",
+	        t("Gift Point")	=> "gpoint",
 		);
 
 		$query = db_select('tbl_home_users_redeems','r');
@@ -85,7 +86,7 @@
 
 		$pager = atoz_admin_pager_by_query($pageQuery,"r", "grid", $dataPerRow, $rowsPerPage, $currentPage, $offset, $total);
 
-		$output .= '<h2 class="list_header"> Redemptions <span class="myst-admin-title-total">('.$total.')</span></h2>';
+		$output .= '<h2 class="list_header">'.t('Redemption History').' <span class="myst-admin-title-total">('.$total.')</span></h2>';
 
 
 		$output .=  $pager . atoz_admin_create_table ("home-admin-table", $header, $data, $styleArray) . $pager;
@@ -126,10 +127,7 @@
 			'#type' => 'date_popup',
 			'#default_value' => $defaultRDateFilter,
 			'#date_format' => 'Y-m-d',
-		);
-
-
-		
+		);		
 
 	    $form['submit'] = array (
 	        '#type' => 'submit',
@@ -151,7 +149,7 @@
 	}
 
 	function myatoz_redemption_history_filter_form_submit($form, &$form_state){
-		if ($form_state["values"]["op"] == "Reset") {
+		if ($form_state["values"]["op"] == t("Reset")) {
 			unset ($_SESSION[ATOZ_REDEEM_DATE_FILTER]);
 			unset ($_SESSION[ATOZ_REDEEM_MEMBER_TIER_FILTER]);
 			

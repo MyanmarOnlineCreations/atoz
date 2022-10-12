@@ -3,55 +3,55 @@
 
     if (strpos ($classes, "page-webapp-upload") > 0 || ($user->uid && strpos ($classes, "page-webapp-user"))) {
         $webappScripts = $scripts . '
-<script type="text/javascript" src="/sites/all/modules/yesc/js/jquery-1.12.14.min.js"></script>
-<script type="text/javascript" src="/sites/all/modules/yesc/js/my_yesc.js?v1.001"></script>
-<script type="text/javascript" src="/sites/all/modules/yesc/js/swiper.min.js"></script>
+<script type="text/javascript" src="/sites/all/modules/atoz/js/jquery-1.12.14.min.js"></script>
+<script type="text/javascript" src="/sites/all/modules/atoz/js/atoz.js?v1.001"></script>
+<script type="text/javascript" src="/sites/all/modules/atoz/js/swiper.min.js"></script>
 ';
         $webappStyles = '
 <link type="text/css" rel="stylesheet" href="/sites/all/modules/plupload/plupload.css" media="all" />
-<link type="text/css" rel="stylesheet" href="/sites/all/modules/yesc/css/my_yesc.css?v1.001" media="all" />
-<link type="text/css" rel="stylesheet" href="/sites/all/modules/yesc/css/swiper.min.css" media="all" />
+<link type="text/css" rel="stylesheet" href="/sites/all/modules/atoz/css/atoz.css?v1.001" media="all" />
+<link type="text/css" rel="stylesheet" href="/sites/all/modules/atoz/css/swiper.min.css" media="all" />
 
 ';
     }
     else if ($user->uid) {
         $webappScripts =  $scripts . '
-<script type="text/javascript" src="/sites/all/modules/yesc/js/jquery-1.12.14.min.js"></script>
-<script type="text/javascript" src="/sites/all/modules/yesc/js/my_yesc.js?v1.001"></script>
-<script type="text/javascript" src="/sites/all/modules/yesc/js/my_yesc_content.js?v1.001"></script>
-<script type="text/javascript" src="/sites/all/modules/yesc/js/swiper.min.js"></script>
+<script type="text/javascript" src="/sites/all/modules/atoz/js/jquery-1.12.14.min.js"></script>
+<script type="text/javascript" src="/sites/all/modules/atoz/js/atoz.js?v1.001"></script>
+<script type="text/javascript" src="/sites/all/modules/atoz/js/atoz_content.js?v1.001"></script>
+<script type="text/javascript" src="/sites/all/modules/atoz/js/swiper.min.js"></script>
 ';
 
         if (strpos ($classes, "page-webapp-episode") > 0) {
             $webappScripts .= '
-<script type="text/javascript" src="/sites/all/modules/yesc/js/hls.min.js"></script>
+<script type="text/javascript" src="/sites/all/modules/atoz/js/hls.min.js"></script>
 ';
         }
 
         $webappStyles = '
-<link type="text/css" rel="stylesheet" href="/sites/all/modules/yesc/css/my_yesc.css?v1.001" media="all" />
-<link type="text/css" rel="stylesheet" href="/sites/all/modules/yesc/css/my_yesc_content.css?v1.001" media="all" />
-<link type="text/css" rel="stylesheet" href="/sites/all/modules/yesc/css/swiper.min.css" media="all" />
+<link type="text/css" rel="stylesheet" href="/sites/all/modules/atoz/css/atoz.css?v1.001" media="all" />
+<link type="text/css" rel="stylesheet" href="/sites/all/modules/atoz/css/atoz_content.css?v1.001" media="all" />
+<link type="text/css" rel="stylesheet" href="/sites/all/modules/atoz/css/swiper.min.css" media="all" />
 ';
     }
     else {
         $webappScripts = '
-<script type="text/javascript" src="/sites/all/modules/yesc/js/jquery-1.12.14.min.js"></script>
-<script type="text/javascript" src="/sites/all/modules/yesc/js/my_yesc.js?v1.001"></script>
-<script type="text/javascript" src="/sites/all/modules/yesc/js/swiper.min.js"></script>
+<script type="text/javascript" src="/sites/all/modules/atoz/js/jquery-1.12.14.min.js"></script>
+<script type="text/javascript" src="/sites/all/modules/atoz/js/atoz.js?v1.001"></script>
+<script type="text/javascript" src="/sites/all/modules/atoz/js/swiper.min.js"></script>
 ';
         $webappStyles = '
-<link type="text/css" rel="stylesheet" href="/sites/all/modules/yesc/css/my_yesc.css?v1.001" media="all" />
-<link type="text/css" rel="stylesheet" href="/sites/all/modules/yesc/css/swiper.min.css" media="all" />
+<link type="text/css" rel="stylesheet" href="/sites/all/modules/atoz/css/atoz.css?v1.001" media="all" />
+<link type="text/css" rel="stylesheet" href="/sites/all/modules/atoz/css/swiper.min.css" media="all" />
 ';
     }
 
     $serverName = "http://" . $_SERVER["SERVER_NAME"];
 
-    if (strpos ($classes, "page-webapp-home") && strpos ($_SERVER["SERVER_NAME"], "myberry.com") === false) {
+    if (strpos ($classes, "page-webapp-home") && strpos ($_SERVER["SERVER_NAME"], "myhome.com") === false) {
         $postUrl = $serverName . "/webapp";
-        $postTitle = htmlentities (MYYESC_SITE_NAME);
-        $postImage = $serverName . "/sites/all/modules/yesc/images/logo.png";
+        $postTitle = htmlentities (ATOZ_SITE_NAME);
+        $postImage = $serverName . "/sites/all/modules/atoz/images/logo.png";
         $postDescription = "";
 
         $description = "";
@@ -62,7 +62,7 @@
 <meta property="og:type"          content="website" />
 <meta property="og:url"           content="'.$postUrl.'" />
 <meta property="og:image"         content="'.$postImage.'" />
-<meta property="og:site_name"     content="'.MYYESC_SITE_NAME.'" />
+<meta property="og:site_name"     content="'.ATOZ_SITE_NAME.'" />
 <meta property="fb:app_id"        content="'.MYGM_FACEBOOK_APPID.'"/>
 ';
 
@@ -129,7 +129,7 @@
   <?php print $head; ?>
   <title><?php print $head_title; ?></title>
 <?php print $extraHeader; ?>
-<link rel="shortcut icon" href="/sites/all/modules/yesc/images/favicon.png" type="image/png" />
+<link rel="shortcut icon" href="/sites/all/modules/atoz/images/favicon.png" type="image/png" />
 <meta name="viewport" content="initial-scale=1.0">
 <link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto&amp;oee08v" media="all" />
 <?php print $webappStyles; ?>

@@ -21,6 +21,42 @@ define ("ATOZ_SITE_NAME", "Royal AtoZ Holding Co_Ltd");
 
 define('ATOZ_USER_ID_FILTER', 'ATOZ_USER_ID_FILTER');
 
+define('ATOZ_REDEEM_MEMBER_TIER_FILTER', 'ATOZ_REDEEM_MEMBER_TIER_FILTER');
+
+define('ATOZ_MEMBER_LEVEL_FILTER', 'ATOZ_MEMBER_LEVEL_FILTER');
+
+define('ATOZ_REDEMPTION_FREQUENCY_FILTER', 'ATOZ_REDEMPTION_FREQUENCY_FILTER');
+
+define('ATOZ_MEMBER_ID_FILTER', 'ATOZ_MEMBER_ID_FILTER');
+
+define('ATOZ_POINT_DATE_FILTER', 'ATOZ_POINT_DATE_FILTER');
+
+define('ATOZ_POINT_MEMBER_LEVEL_FILTER', 'ATOZ_POINT_MEMBER_LEVEL_FILTER');
+
+define('ATOZ_POINT_MID_FILTER', 'ATOZ_POINT_MID_FILTER');
+
+define('ATOZ_REDEEM_DATE_FILTER', 'ATOZ_REDEEM_DATE_FILTER');
+
+define('ATOZ_REDEEM_MEMBER_LEVEL_FILTER', 'ATOZ_REDEEM_MEMBER_LEVEL_FILTER');
+
+define('ATOZ_REDEEM_MEM_ID_FILTER', 'ATOZ_REDEEM_MEM_ID_FILTER');
+
+define('ATOZ_REDEEM_OUTLET_FILTER', 'ATOZ_REDEEM_OUTLET_FILTER');
+
+define('ATOZ_POINT_OUTLET_FILTER', 'ATOZ_POINT_OUTLET_FILTER');
+
+define('ATOZ_POINT_MEMBER_TYPE', 'ATOZ_POINT_MEMBER_TYPE');
+
+define('ATOZ_MEMBER_TOWNSHIP_FILTER','ATOZ_MEMBER_TOWNSHIP_FILTER');
+
+define('ATOZ_MEMBER_CITY_FILTER','ATOZ_MEMBER_CITY_FILTER');
+
+define('ATOZ_MEMBER_TYPE_FILTER', 'ATOZ_MEMBER_TYPE_FILTER');
+
+define('ATOZ_REDEEM_MEMBER_TYPE_FILTER', 'ATOZ_REDEEM_MEMBER_TYPE_FILTER');
+
+
+
 
 $debug = 0;
 
@@ -54,14 +90,14 @@ if (strpos ($_SERVER["SERVER_NAME"], "myhome") !== FALSE) {
     define('ATOZ_SERVER_NAME', 'http://myhome.com');
 
 }
-else if (strpos ($_SERVER["SERVER_NAME"], "subwaycoupons.myanmaronlinecreations.com") !== FALSE) {
+else if (strpos ($_SERVER["SERVER_NAME"], "wp.myanmaronlinecreations.com") !== FALSE) {
     define ('ATOZ_DEFAULT_TIMEZONE', 'Asia/Rangoon');
     //define ('ATOZ_FACEBOOK_APPID', '478656885837382'); // game
     define ('ATOZ_LOCAL_FILESTORAGE', '1');
     define ("ATOZ_PAYMENT_PORTAL", "https://ezdin-gar.myanmaronlinecreations.com");
-    define ("ATOZ_APP_LOGO", "https://subwaycoupons.myanmaronlinecreations.com/sites/all/modules/atoz/images/webapp_logo.png");
+    define ("ATOZ_APP_LOGO", "http://wp.myanmaronlinecreations.com/sites/all/modules/atoz/images/webapp_logo.png");
     //define ("ATOZ_GAMEGABAR_SIGNIN", "http://gamegabar.myanmaronlinecreations.com/webapp/signin");
-    define('ATOZ_SERVER_NAME', 'https://subwaycoupons.myanmaronlinecreations.com');
+    define('ATOZ_SERVER_NAME', 'http://wp.myanmaronlinecreations.com');
 
 }
 else {
@@ -71,7 +107,7 @@ else {
     define ("ATOZ_PAYMENT_PORTAL", "https://ezdin-gar.com");
     define ("ATOZ_APP_LOGO", "https://atoz.com/sites/all/modules/atoz/images/webapp_logo.png");
     define ("ATOZ_GAMEGABAR_SIGNIN", "https://atoz.com/api/moc/cgredirect.php");
-    define('ATOZ_SERVER_NAME', 'https://subwaycoupons.com');
+    define('ATOZ_SERVER_NAME', 'http://wp.com');
 
 }
 
@@ -175,16 +211,15 @@ function atoz_home_page ($parameter1=NULL, $parameter2=NULL, $parameter3=NULL, $
 }
 
 function atoz_webapp_page ($parameter1=NULL, $parameter2=NULL, $parameter3=NULL, $parameter4=NULL, $parameter5=NULL, $parameter6=NULL, $parameter7=NULL) {
-	
-	global $user;
-	if ($user->uid) {
-          if (in_array('super admin', $user->roles) || in_array('staff admin', $user->roles) ){
-            drupal_goto ("atoz");
-          }  
-	}  
 	require_once ("includes/atoz_util.inc");
-	require_once ("includes/atoz_webapp.inc");
-	return atoz_webapp ($parameter1, $parameter2, $parameter3, $parameter4, $parameter5, $parameter6, $parameter7);
+	global $user;
+	//require_once ("includes/atoz_webapp.inc");
+	if ($user->uid) {
+        	drupal_goto ("atoz");
+        
+   	 }
+
+	//return atoz_webapp ($parameter1, $parameter2, $parameter3, $parameter4, $parameter5, $parameter6, $parameter7);
 }
 
 function atoz_api_page ($parameter1=NULL, $parameter2=NULL, $parameter3=NULL, $parameter4=NULL, $parameter5=NULL) {

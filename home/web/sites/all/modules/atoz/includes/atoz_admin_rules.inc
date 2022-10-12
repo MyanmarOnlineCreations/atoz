@@ -1,6 +1,8 @@
 <?php
 	function myatoz_rules($parameter1=null,$parameter2=null){
-		
+	   global $user;
+  	   if (in_array('super admin', $user->roles)) {
+
 		$output = '';
 
 		if($parameter1 == 'new'){
@@ -14,6 +16,7 @@
 		}
 
 		return $output;
+	   }
 	}
 
 
@@ -22,18 +25,18 @@
 		global $user;
 
 		$output="";	
-		$offset = 0;
 		$link = $_SERVER["REQUEST_URI"];
 		$rowsPerPage = 100;
 		$dataPerRow = 1;
+		$offset = atoz_admin_page_offset($rowsPerPage);		
+		
     	$data = array();
 
 		$sortOptions = array (
-			"default"			=> "created_date",
-			"member_type"		=> "",
-			"created_date"  	=> "desc",
-			"member_tier"		=> "",
-			"point_range"		=> "",
+			"default"			=> "member_level",
+			"member_level"		=> "",
+			"spent_amount"  	=> "desc",
+			"point"				=> "",
 			
 		);
 
@@ -46,14 +49,19 @@
 		);
 
 		$headerFields = array (
-			"Member Level"     => "member_level",
-	        "Spent Amount" 	  => "spent_amount",
-	        "Point"	  => "point",
-	        "Action" => "",
+			t("Member Level")     => "member_level",
+	        t("Spent Amount") 	  => "spent_amount",
+	        t("Point")	  		  => "point",
+	        t("Action") 		  => "",
 		);
 
 		$query = db_select('tbl_home_rules','r');
 		$query -> fields('r');
+
+		$query->range($offset, $rowsPerPage);
+
+	    atoz_checksort ($sortOptions, $query);
+	    
 		$result = $query->execute();
 
 		$member_level_arr = atoz_member_level();
@@ -75,10 +83,10 @@
 
 		$pager = atoz_admin_pager_by_query($pageQuery,"r", "id", $dataPerRow, $rowsPerPage, $currentPage, $offset, $total);
 
-		$output .= '<a href="/atoz/memberlayer_rules/new"> + Add Rule</a>';
+		// $output .= '<a href="/atoz/memberlayer_rules/new"> + '.t('Add Rule').'</a>';
 
 
-		$output .= '<h2 class="list_header"> Rules <span class="myst-admin-title-total">('.$total.')</span></h2>';
+		$output .= '<h2 class="list_header">'. t('Rules') .'<span class="myst-admin-title-total">('.$total.')</span></h2>';
 
 
 		$output .=  $pager . atoz_admin_create_table ("home-admin-table", $header, $data, $styleArray) . $pager;
@@ -94,7 +102,7 @@
 		$form = array('#id' => 'my-atoz-outlet-edit');
 
 		$form['title'] = array (
-	      	'#markup' => 'New Rule',
+	      	'#markup' => t('New Rule'),
 	    );		
 
 	    $member_level_arr = atoz_member_level();
@@ -140,7 +148,7 @@
 
 		global $user;
 
-		$now = date('Y-m-d G:i:s');
+		$now = date('Y-m-d h:i:s');
 
 		$data = $form_state['values'];
 
@@ -151,7 +159,7 @@
 		$member_level_arr = atoz_member_level();
 
 		if($data['ruleId'] == ''){
-			
+
 			$ruleId = atoz_get_unique_profile_id('R');	
 
 			$query = db_select('tbl_home_rules','h');
@@ -161,7 +169,7 @@
 
 			if($result->ruleId != ''){
 				$alreadyExist = true;
-			}	
+			}
 
 		}else{
 			$ruleId = $data['ruleId'];

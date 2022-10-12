@@ -14,17 +14,21 @@
 		global $user;
 
 		$output="";	
-		$offset = 0;
 		$link = $_SERVER["REQUEST_URI"];
 		$rowsPerPage = 100;
 		$dataPerRow = 1;
+		$offset = atoz_admin_page_offset($rowsPerPage);		
+		
     	$data = array();
 
 		$sortOptions = array (
 			"default"			=> "created_date",
-			"name"				=> "",
+			"created_date"		=> "desc",
+			"name"				=> "desc",
+			"gmid"				=> "desc",
 			"member_level"  	=> "desc",
-			"phone"				=> "",
+			"phone"				=> "desc",
+
 			
 		);
 
@@ -32,19 +36,27 @@
 			"",
 			"",
 			"",
+			"",
+			"",
+			"",
 		);
 
 		$headerFields = array (
-			"Name"      		=> "name",
-	        "Membership Level" 	=> "member_level",
-	        "Phone"				=> "phone",
+			t("Name")     		=> "name",
+			t("Member ID")		=> "gmid",
+	        t("Membership Level") 	=> "member_level",
+	        t("Phone")				=> "phone",
 	        
 		);
 
 		$query = db_select('tbl_home_members_info','m');
-		$query ->fields('m',array('name','member_level','phone'));
+		$query ->fields('m',array('name','gmid','member_level','phone'));
 
 		$query ->where("DATE_FORMAT(dob, '%d/%m') = DATE_FORMAT(CURDATE(),'%d/%m') and status = 1001");
+
+		$query->range($offset, $rowsPerPage);
+
+	    atoz_checksort ($sortOptions, $query);
 
 		$result = db_query($query);
 
@@ -72,7 +84,7 @@
 
 		$pager = atoz_admin_pager_by_query($pageQuery,"m", "gmid", $dataPerRow, $rowsPerPage, $currentPage, $offset, $total);
 
-		$output .= '<h2 class="list_header"> Members <span class="myst-admin-title-total">('.$total.')</span></h2>';
+		$output .= '<h2 class="list_header"> '.t('Members'). '<span class="myst-admin-title-total">('.$total.')</span></h2>';
 
 
 		$output .=  $pager . atoz_admin_create_table ("home-admin-table", $header, $data, $styleArray) . $pager;
